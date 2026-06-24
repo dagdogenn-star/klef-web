@@ -5,318 +5,338 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Klef — Müziği Oyun Gibi Öğren</title>
 <meta name="description" content="Klef: nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada öğreten uygulama. Konservatuvar pedagojisiyle, oyun gibi.">
-<meta property="og:title" content="Klef — Nota okumayı bir dakikada başlat">
+<meta property="og:title" content="Klef — Notalar artık bir yabancı değil">
 <meta property="og:description" content="Nota oku, kulağını eğit, ritmini bul. Cebinde küçük bir konservatuvar.">
-<meta name="theme-color" content="#08081a">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f4efe3">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#08081a;--ink:#f4f3ff;--ink2:#aab0d6;--ink3:#777ea8;
-    --gold:#f5cd6a;--violet:#9a7bff;--coral:#ff7a9c;--mint:#5fe3c0;--blue:#5aa9ff;
-    --line:rgba(255,255,255,.08);--card:rgba(255,255,255,.04)}
+  :root{
+    --paper:#f4efe3;--paper2:#ece3d0;--card:#faf6ec;
+    --ink:#13173a;--ink2:#4a4f72;--ink3:#8c8aa0;
+    --gold:#b0863a;--goldb:#d8b25a;--goldd:#8c6a2c;
+    --line:rgba(19,23,58,.13);--rule:rgba(176,134,58,.45)}
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden}
+  ::selection{background:rgba(176,134,58,.25);color:var(--ink)}
+  html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
-  .display{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.02em;line-height:.98}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+  .serif{font-family:'Fraunces',Georgia,serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 30px}
+  .mk{font-family:'Fraunces',serif;font-style:italic;font-weight:500;color:var(--gold)}
+  .label{font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
 
-  /* animated background */
-  .bg{position:fixed;inset:0;z-index:-3;background:radial-gradient(800px 600px at 12% -6%,rgba(154,123,255,.30),transparent 60%),radial-gradient(700px 560px at 96% 6%,rgba(245,205,106,.16),transparent 56%),radial-gradient(900px 760px at 50% 116%,rgba(95,227,192,.12),transparent 60%),#08081a;background-size:200% 200%;animation:meshmove 22s ease-in-out infinite}
-  @keyframes meshmove{0%,100%{background-position:0 0}50%{background-position:30% 20%}}
-  .orb{position:fixed;border-radius:50%;filter:blur(64px);z-index:-2;opacity:.45;transition:transform .4s ease-out;will-change:transform}
-  .orb.a{width:340px;height:340px;background:#9a7bff;top:-80px;left:-60px}
-  .orb.b{width:300px;height:300px;background:#f5cd6a;top:28%;right:-90px}
-  .orb.c{width:280px;height:280px;background:#5fe3c0;bottom:-100px;left:30%}
-  .notes{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-  .nt{position:absolute;color:rgba(255,255,255,.13);animation:rise linear infinite}
-  @keyframes rise{0%{transform:translateY(40px) rotate(0);opacity:0}12%{opacity:.7}90%{opacity:.45}100%{transform:translateY(-130px) rotate(22deg);opacity:0}}
+  /* paper texture + faint staff watermark */
+  .paper-tex{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
+  .vignette{position:fixed;inset:0;z-index:-1;pointer-events:none;box-shadow:inset 0 0 240px rgba(120,95,50,.14)}
 
   /* reveal */
-  .rv{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
   .rv.in{opacity:1;transform:none}
-  .rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}.rv.d5{transition-delay:.4s}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
 
   /* nav */
-  nav{position:sticky;top:0;z-index:60;backdrop-filter:blur(16px);background:rgba(8,8,26,.55);border-bottom:1px solid var(--line)}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
-  .logo{display:flex;align-items:center;gap:11px}
-  .logo .clef{width:30px;height:30px;color:var(--gold);filter:drop-shadow(0 2px 9px rgba(245,205,106,.55))}
-  .logo b{font-size:26px}
-  .nav-r{display:flex;align-items:center;gap:22px}
-  .nav-r a.lk{font-weight:600;color:var(--ink2);font-size:15px;transition:.2s}.nav-r a.lk:hover{color:var(--gold)}
-  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:15px;padding:13px 24px;border-radius:50px;transition:.22s;border:none;cursor:pointer}
-  .btn-p{background:linear-gradient(120deg,var(--violet),#6f54e8);color:#fff;box-shadow:0 10px 30px rgba(154,123,255,.4)}
-  .btn-p:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 16px 42px rgba(154,123,255,.6)}
+  nav{position:sticky;top:0;z-index:60;background:rgba(244,239,227,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo .clef{width:26px;height:30px;color:var(--ink)}
+  .logo b{font-size:27px;font-weight:600;letter-spacing:.5px}
+  .nav-r{display:flex;align-items:center;gap:30px}
+  .nav-r a.lk{font-weight:600;color:var(--ink2);font-size:14.5px;transition:.2s;position:relative}
+  .nav-r a.lk:hover{color:var(--ink)}
+  .nav-r a.lk::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1.5px;background:var(--gold);transition:width .25s}.nav-r a.lk:hover::after{width:100%}
+  .pillbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;padding:11px 22px;border-radius:50px;background:var(--ink);color:var(--paper);transition:transform .22s,box-shadow .3s;will-change:transform}
+  .pillbtn:hover{box-shadow:0 12px 26px rgba(19,23,58,.25)}
+  .pillbtn.gold{background:linear-gradient(120deg,var(--goldb),var(--gold));color:#241a07}
 
-  /* hero */
-  header{position:relative;padding:46px 0 14px}
-  .hero{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-  .pill{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--gold);padding:8px 16px;border:1px solid rgba(245,205,106,.3);border-radius:50px;background:rgba(245,205,106,.08);margin-bottom:26px}
-  h1{font-size:clamp(44px,6.6vw,88px);margin-bottom:24px}
-  h1 .w{display:inline-block;opacity:0;transform:translateY(40px) rotate(4deg);animation:wordin .8s cubic-bezier(.2,.8,.2,1) forwards}
-  h1 .w:nth-child(2){animation-delay:.12s}h1 .w:nth-child(3){animation-delay:.24s}
-  @keyframes wordin{to{opacity:1;transform:none}}
-  .grad{background:linear-gradient(100deg,var(--gold),var(--coral) 55%,var(--violet));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hue 6s linear infinite}
-  @keyframes hue{to{background-position:200% center}}
-  .lead{font-size:clamp(16px,1.9vw,20px);color:var(--ink2);max-width:520px;margin-bottom:34px}
-  .cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-  .appstore{display:inline-flex;align-items:center;gap:13px;background:#000;border:1px solid rgba(255,255,255,.15);padding:12px 24px;border-radius:16px;transition:.22s}
-  .appstore:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 14px 32px rgba(0,0,0,.4)}
-  .appstore svg{width:27px;height:27px;color:#fff}
-  .appstore .a1{font-size:11px;color:#bbb;line-height:1.1}.appstore .a2{font-size:19px;font-weight:600;color:#fff;line-height:1.2}
-  .ghost{font-weight:700;color:var(--ink2);padding:13px 6px;transition:.2s}.ghost:hover{color:var(--gold)}
-  .trust{margin-top:28px;display:flex;align-items:center;gap:13px;color:var(--ink3);font-size:14px;flex-wrap:wrap}
-  .stars{color:var(--gold);letter-spacing:2px}
-  .eq{display:inline-flex;align-items:flex-end;gap:3px;height:16px}.eq i{width:3px;background:var(--mint);border-radius:2px;animation:bounce 1s ease-in-out infinite}
-  .eq i:nth-child(2){animation-delay:.15s}.eq i:nth-child(3){animation-delay:.3s}.eq i:nth-child(4){animation-delay:.45s}.eq i:nth-child(5){animation-delay:.2s}
-  @keyframes bounce{0%,100%{height:4px}50%{height:16px}}
+  /* ── HERO ── */
+  header{position:relative;padding:30px 0 0;overflow:hidden}
+  .bigclef{position:absolute;right:-40px;top:-30px;width:min(560px,52vw);color:var(--gold);opacity:.13;z-index:0;pointer-events:none}
+  .hero{position:relative;z-index:2;padding:34px 0 20px}
+  .movement{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+  .movement .ln{height:1px;width:54px;background:var(--rule)}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(50px,8.4vw,116px);line-height:.96;letter-spacing:-.02em;max-width:14ch;margin-bottom:0}
+  h1 em{font-style:italic;font-weight:500;color:var(--gold);position:relative}
+  h1 .w{display:inline-block;opacity:0;transform:translateY(40px);animation:win .9s cubic-bezier(.2,.8,.2,1) forwards}
+  h1 .w:nth-child(2){animation-delay:.12s}h1 .w:nth-child(3){animation-delay:.24s}h1 .w:nth-child(4){animation-delay:.36s}
+  @keyframes win{to{opacity:1;transform:none}}
+  .underw{display:inline-block}.underw svg{display:block;width:100%;height:.34em;margin-top:-.06em;overflow:visible}
+  .underw path{stroke:var(--goldb);stroke-width:8;fill:none;stroke-linecap:round;stroke-dasharray:360;stroke-dashoffset:360;animation:draw 1.1s cubic-bezier(.3,.7,.3,1) 1s forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .lead{font-size:clamp(17px,1.7vw,20px);color:var(--ink2);max-width:520px;margin:30px 0 32px}
+  .lead .drop{font-family:'Fraunces',serif;font-weight:600;font-size:1.05em;color:var(--ink)}
+  .cta{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .appstore{display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--paper);padding:13px 24px;border-radius:14px;transition:transform .22s,box-shadow .3s;will-change:transform}
+  .appstore:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(19,23,58,.28)}
+  .appstore svg{width:26px;height:26px;color:var(--paper)}
+  .appstore .a1{font-size:11px;opacity:.7;line-height:1.1}.appstore .a2{font-size:18px;font-weight:600;line-height:1.2}
+  .ghost{display:inline-flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);transition:.2s}
+  .ghost .pl{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;transition:.25s}.ghost:hover .pl{background:var(--ink);color:var(--paper)}
+  .ghost .pl svg{width:11px;height:11px;margin-left:2px}
+  .trust{margin-top:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:var(--ink3);font-size:14px}
+  .trust .stars{color:var(--gold);letter-spacing:2px;font-size:15px}
+  .flags{font-size:15px;letter-spacing:1px;filter:grayscale(.15)}
 
-  /* phone */
-  .phone-wrap{position:relative;display:flex;justify-content:center}
-  .phone{position:relative;z-index:2;width:296px;height:604px;border-radius:54px;padding:11px;background:linear-gradient(145deg,#3a3a66,#15152e 40%,#0a0a1e);box-shadow:0 60px 120px rgba(0,0,0,.65),0 0 0 1.5px rgba(255,255,255,.10),inset 0 1px 2px rgba(255,255,255,.18);transform:rotate(3deg) perspective(1200px) rotateY(-7deg);animation:floaty 6s ease-in-out infinite}
-  @keyframes floaty{0%,100%{transform:rotate(3deg) perspective(1200px) rotateY(-7deg) translateY(0)}50%{transform:rotate(3deg) perspective(1200px) rotateY(-7deg) translateY(-14px)}}
-  .vol{position:absolute;left:-3px;width:3px;background:#22224a;border-radius:4px 0 0 4px}.vol.v1{top:120px;height:30px}.vol.v2{top:160px;height:48px}.pw{position:absolute;right:-3px;top:172px;width:3px;height:62px;background:#22224a;border-radius:0 4px 4px 0}
-  .screen{width:100%;height:100%;border-radius:44px;overflow:hidden;position:relative;background:radial-gradient(120% 80% at 50% 0,#1b1d4d,#0c0d28 55%,#0a0a22)}
-  .island{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:90px;height:27px;background:#000;border-radius:16px;z-index:5}
-  .island::after{content:"";position:absolute;right:11px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#2b3a5a,#0a0f1a)}
-  .sp{padding:50px 18px 18px}
-  .topl{font-size:9px;letter-spacing:2px;font-weight:800;color:var(--gold);text-transform:uppercase;text-align:center;margin-bottom:8px}
-  .sbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-  .chip{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:50px;background:rgba(255,255,255,.07);border:1px solid var(--line);font-size:12px;font-weight:800}
-  .chip.h{color:var(--coral)}.chip.s{color:var(--gold)}.chip.x{color:var(--violet)}
-  .qcard{position:relative;background:linear-gradient(165deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:22px;padding:16px 14px 14px;margin-bottom:15px;box-shadow:0 14px 34px rgba(0,0,0,.35)}
-  .ql{font-size:10px;letter-spacing:1.4px;color:var(--ink3);font-weight:800;text-transform:uppercase;text-align:center;margin-bottom:9px}
-  .playb{position:absolute;right:13px;bottom:12px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),#d9a93f);box-shadow:0 6px 16px rgba(245,205,106,.5)}.playb svg{width:14px;height:14px;color:#1a1530;margin-left:2px}
-  .ans{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-  .a{padding:13px;border-radius:15px;font-weight:800;font-size:15px;text-align:center;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink2)}
-  .a.ok{background:linear-gradient(135deg,var(--mint),#33c79f);color:#062019;border-color:transparent;box-shadow:0 8px 22px rgba(95,227,192,.45)}
-  .prog{height:7px;border-radius:50px;background:rgba(255,255,255,.08);margin-top:15px;overflow:hidden}.prog i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--gold),var(--coral),var(--violet))}
-  /* floating mini cards around phone */
-  .fcard{position:absolute;z-index:3;background:rgba(20,20,46,.85);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:16px;padding:11px 14px;display:flex;align-items:center;gap:9px;font-weight:700;font-size:13px;box-shadow:0 16px 36px rgba(0,0,0,.4);animation:floaty 5s ease-in-out infinite}
-  .fcard .em{font-size:18px}
-  .fcard.f1{top:60px;left:-22px;color:var(--mint);animation-delay:-1s}
-  .fcard.f2{bottom:120px;right:-30px;color:var(--gold);animation-delay:-2.5s}
+  /* ── SIGNATURE: the score strip ── */
+  .scoreband{position:relative;margin-top:46px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(250,246,236,.6),transparent)}
+  .scoreband .inner{position:relative;padding:30px 0 26px}
+  .tempo{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+  .tempo .t{font-family:'Fraunces',serif;font-style:italic;color:var(--ink2);font-size:15px}
+  .tempo .t b{color:var(--ink);font-style:normal;font-weight:600}
+  .staffsvg{width:100%;height:130px;display:block;overflow:visible}
+  .ph{stroke:var(--goldb);stroke-width:2.4;opacity:.9;filter:drop-shadow(0 0 6px rgba(216,178,90,.7))}
 
-  /* stats */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:8px 0 0}
-  .stat{text-align:center;padding:26px 14px;border-radius:22px;background:var(--card);border:1px solid var(--line)}
-  .stat .num{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(34px,4.4vw,48px);background:linear-gradient(120deg,var(--gold),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
-  .stat .lab{color:var(--ink2);font-size:14px;margin-top:8px;font-weight:600}
+  /* ── sections ── */
+  section{padding:74px 0}
+  .sec-head{max-width:660px;margin-bottom:46px}
+  .sec-head.ctr{margin:0 auto 50px;text-align:center}
+  .sec-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4.8vw,58px);line-height:1.02;letter-spacing:-.015em;margin:14px 0 12px}
+  .sec-head h2 em{font-style:italic;color:var(--gold)}
+  .sec-head p{color:var(--ink2);font-size:17px}
 
-  /* marquee */
-  .marquee{margin:34px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;overflow:hidden;white-space:nowrap;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-  .track{display:inline-block;animation:scroll 28s linear infinite}.track span{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:24px;color:var(--ink2);margin:0 26px}.track span b{color:var(--gold)}
-  @keyframes scroll{to{transform:translateX(-50%)}}
+  /* features as movements — editorial rows */
+  .moves{border-top:1px solid var(--line)}
+  .move{display:grid;grid-template-columns:88px 1fr auto;gap:26px;align-items:center;padding:26px 8px;border-bottom:1px solid var(--line);position:relative;transition:padding-left .3s,background .3s}
+  .move::before{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--gold),transparent);transition:width .5s}
+  .move:hover{padding-left:18px;background:linear-gradient(90deg,rgba(176,134,58,.05),transparent)}
+  .move:hover::before{width:100%}
+  .move .rn{font-family:'Fraunces',serif;font-weight:500;font-size:34px;color:var(--gold);line-height:1}
+  .move .mt{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .move h3{font-family:'Fraunces',serif;font-weight:600;font-size:25px;letter-spacing:-.01em}
+  .move .tm{font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:15px}
+  .move p{color:var(--ink2);font-size:15.5px;margin-top:5px;max-width:62ch}
+  .move .ic{width:50px;height:50px;color:var(--ink);opacity:.78;transition:.3s}.move:hover .ic{color:var(--gold);opacity:1;transform:scale(1.08)}
+  .move .ic svg{width:34px;height:34px}
 
-  section{padding:52px 0}
-  .eyebrow{text-align:center;color:var(--gold);font-weight:700;letter-spacing:2.2px;font-size:12px;text-transform:uppercase;margin-bottom:14px}
-  .sec-h{text-align:center;max-width:680px;margin:0 auto 36px}
-  .sec-h h2{font-size:clamp(32px,4.6vw,52px);margin-bottom:14px}.sec-h h2 .g{background:linear-gradient(100deg,var(--gold),var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sec-h p{color:var(--ink2);font-size:17px}
+  /* app excerpt — framed manuscript card */
+  .excerpt{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  .frame{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 40px 80px rgba(19,23,58,.16),0 2px 0 rgba(255,255,255,.6) inset;transform:rotate(-1.2deg);transition:transform .4s}
+  .frame:hover{transform:rotate(0)}
+  .frame::after{content:"♩ = 96";position:absolute;top:-13px;left:24px;background:var(--paper);padding:0 10px;font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:14px}
+  .scr{border-radius:13px;overflow:hidden;background:linear-gradient(165deg,#171b46,#0e1130);padding:18px 16px 16px;color:#eef}
+  .scr .top{font-size:9px;letter-spacing:2px;font-weight:800;color:var(--goldb);text-transform:uppercase;text-align:center;margin-bottom:10px}
+  .scr .bar{display:flex;justify-content:space-between;margin-bottom:14px}
+  .scr .chip{font-size:11px;font-weight:800;padding:5px 10px;border-radius:50px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
+  .scr .chip.h{color:#ff8fab}.scr .chip.s{color:var(--goldb)}.scr .chip.x{color:#b09bff}
+  .scr .q{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:13px}
+  .scr .ql{font-size:9px;letter-spacing:1.4px;color:#9296c4;font-weight:800;text-transform:uppercase;text-align:center;margin-bottom:7px}
+  .scr .ans{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .scr .a{padding:11px;border-radius:12px;font-weight:800;font-size:14px;text-align:center;border:1px solid rgba(255,255,255,.09);color:#aeb2da;background:rgba(255,255,255,.04)}
+  .scr .a.ok{background:linear-gradient(135deg,#5fe3c0,#33c79f);color:#062019;border-color:transparent}
+  .scr .prog{height:6px;border-radius:50px;background:rgba(255,255,255,.08);overflow:hidden}.scr .prog i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--goldb),#ff7a9c,#9a7bff)}
+  .excerpt-txt h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);line-height:1.04;margin-bottom:16px}.excerpt-txt h2 em{font-style:italic;color:var(--gold)}
+  .excerpt-txt p{color:var(--ink2);font-size:17px;margin-bottom:14px}
 
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  .feat{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:30px;transition:transform .15s ease-out,box-shadow .3s,border-color .3s;transform-style:preserve-3d}
-  .feat:hover{box-shadow:0 30px 60px rgba(0,0,0,.4);border-color:rgba(245,205,106,.35)}
-  .feat .ic{width:60px;height:60px;border-radius:18px;display:grid;place-items:center;margin-bottom:18px;border:1px solid var(--line);transition:transform .3s}.feat:hover .ic{transform:translateZ(30px) scale(1.05)}
-  .feat .ic svg{width:30px;height:30px}
-  .feat h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;margin-bottom:8px}
-  .feat p{color:var(--ink2);font-size:15px}
-
-  /* circle of fifths showcase */
-  .show{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
-  .cof{position:relative;width:300px;height:300px;margin:0 auto;justify-self:center}
-  .cof::before{content:"";position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle,rgba(154,123,255,.25),transparent 65%);filter:blur(10px)}
-  .cof-ring{position:absolute;inset:0;animation:spin 44s linear infinite}
-  .cof-disc{position:absolute;inset:18px;border-radius:50%;border:1px solid var(--line);background:radial-gradient(circle,rgba(255,255,255,.04),rgba(255,255,255,.01))}
-  .cn{position:absolute;top:50%;left:50%;width:48px;height:48px;margin:-24px;border-radius:50%;display:grid;place-items:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;color:var(--ink);background:rgba(20,20,46,.7);border:1px solid var(--line);
-    transform:rotate(calc(var(--i)*30deg)) translateY(-122px)}
-  .cn.maj{color:var(--gold);border-color:rgba(245,205,106,.4)}
-  .cof-hub{position:absolute;top:50%;left:50%;width:84px;height:84px;margin:-42px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#222252,#0c0c26);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);z-index:2}
-  .cof-hub svg{width:38px;height:38px;color:var(--gold);filter:drop-shadow(0 0 8px rgba(245,205,106,.5))}
+  /* circle of fifths — engraving */
+  .show{display:grid;grid-template-columns:.95fr 1.05fr;gap:60px;align-items:center}
+  .cof{position:relative;width:320px;height:320px;margin:0 auto}
+  .cof svg.ring{position:absolute;inset:0;animation:spin 50s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .show-txt h2{font-size:clamp(30px,4vw,44px);margin-bottom:16px}.show-txt h2 .g{background:linear-gradient(100deg,var(--gold),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .show-txt p{color:var(--ink2);font-size:17px;margin-bottom:14px}
-  .tagrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-  .tag{font-size:13px;font-weight:700;padding:8px 14px;border-radius:50px;border:1px solid var(--line);background:var(--card);color:var(--ink2)}
+  .cof .cn{position:absolute;top:50%;left:50%;width:46px;height:46px;margin:-23px;border-radius:50%;display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--ink);background:var(--card);border:1px solid var(--line);transform:rotate(calc(var(--i)*30deg)) translateY(-132px)}
+  .cof .cn.maj{color:var(--goldd);border-color:var(--rule)}
+  .cof .hub{position:absolute;top:50%;left:50%;width:96px;height:96px;margin:-48px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 38% 32%,#1a1e48,#0e1130);box-shadow:0 14px 34px rgba(19,23,58,.3);z-index:2}
+  .cof .hub svg{width:46px;height:46px;color:var(--goldb)}
+  .tagrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .tag{font-size:13px;font-weight:600;padding:7px 15px;border-radius:50px;border:1px solid var(--line);color:var(--ink2);transition:.2s}.tag:hover{border-color:var(--gold);color:var(--gold)}
 
-  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-  .step{padding:32px;border-radius:24px;background:var(--card);border:1px solid var(--line)}
-  .step .n{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:48px;line-height:1;background:linear-gradient(120deg,var(--gold),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .step h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:10px 0 6px}.step p{color:var(--ink2);font-size:15px}
+  /* teachers — pull quote */
+  .quote{position:relative;text-align:center;max-width:860px;margin:0 auto;padding:0 10px}
+  .quote .qm{font-family:'Fraunces',serif;font-size:120px;line-height:.5;color:var(--gold);opacity:.4;height:60px}
+  .quote blockquote{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,3.5vw,40px);line-height:1.28;letter-spacing:-.01em;margin-bottom:24px}
+  .quote blockquote em{font-style:italic;color:var(--gold)}
+  .quote .by{color:var(--ink2);font-size:15px;font-weight:600}
 
-  .band{position:relative;border-radius:34px;padding:60px 40px;text-align:center;overflow:hidden;border:1px solid var(--line);background:linear-gradient(125deg,rgba(154,123,255,.18),rgba(245,205,106,.1))}
-  .band h2{font-size:clamp(30px,4vw,44px);margin-bottom:14px}.band p{color:var(--ink2);max-width:580px;margin:0 auto 28px;font-size:17px}
+  /* coda */
+  .coda{text-align:center;position:relative}
+  .coda h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(40px,6vw,82px);line-height:1;letter-spacing:-.02em;margin:14px 0 18px}.coda h2 em{font-style:italic;color:var(--gold)}
+  .coda p{color:var(--ink2);font-size:18px;margin-bottom:34px}
+  .fermata{font-size:40px;color:var(--gold);line-height:1}
 
-  .final{text-align:center;position:relative}
-  .final h2{font-size:clamp(38px,5.6vw,68px);margin-bottom:16px}.final h2 .g{background:linear-gradient(100deg,var(--gold),var(--coral) 55%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .final p{color:var(--ink2);font-size:18px;margin-bottom:34px}
-
-  footer{border-top:1px solid var(--line);padding:46px 0;margin-top:24px}
-  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;color:var(--ink3);font-size:14px}
+  footer{border-top:1px solid var(--line);padding:40px 0;margin-top:30px}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;color:var(--ink3);font-size:14px}
   .foot a{transition:.2s}.foot a:hover{color:var(--gold)}.foot-links{display:flex;gap:24px;flex-wrap:wrap}
+  .fin{font-family:'Fraunces',serif;font-style:italic;color:var(--gold)}
 
-  @media(max-width:900px){.hero,.show{grid-template-columns:1fr;text-align:center}.lead,.pill{margin-left:auto;margin-right:auto}.cta,.trust{justify-content:center}.phone-wrap{margin-top:44px}.grid,.steps{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.nav-r a.lk{display:none}.show-txt{order:2}.fcard{display:none}}
-  @media(max-width:480px){.phone{animation:none;transform:none}}
-  @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+  @media(max-width:900px){
+    .excerpt,.show{grid-template-columns:1fr;gap:40px}
+    .show-txt,.excerpt-txt{text-align:center}.tagrow{justify-content:center}
+    .sec-head{text-align:center;margin-left:auto;margin-right:auto}
+    .nav-r a.lk{display:none}.bigclef{opacity:.08}
+    .move{grid-template-columns:54px 1fr;gap:16px}.move .ic{display:none}
+    .frame{transform:none}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}.underw path{stroke-dashoffset:0}h1 .w{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<div class="bg"></div><div class="orb a" data-s="2"></div><div class="orb b" data-s="-1.5"></div><div class="orb c" data-s="1"></div>
+<div class="paper-tex"></div><div class="vignette"></div>
 
 <svg style="display:none">
   <symbol id="clef" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2c-1.5 0-2.7 1.3-2.7 3 0 1.2.5 2.1 1.2 3.2-2 1.8-3.5 3.6-3.5 6.1 0 2.7 2 4.7 4.6 4.7.5 0 1-.1 1.4-.2l.2 2.1c.1 1.4-.7 2.3-1.8 2.3-.9 0-1.6-.5-1.7-1.2.6-.1 1-.6 1-1.2 0-.7-.6-1.3-1.3-1.3-.8 0-1.4.7-1.4 1.6 0 1.6 1.5 2.8 3.4 2.8 2 0 3.5-1.5 3.3-3.6l-.2-2.4c1.4-.6 2.3-1.9 2.3-3.5 0-1.9-1.4-3.3-3.2-3.3-.2 0-.5 0-.7.1l-.3-2.8c.9-1.1 1.6-2.2 1.6-3.6 0-1.8-1.2-3.1-2.5-3.1zm0 1.4c.5 0 .9.7.9 1.7 0 .9-.4 1.6-1 2.4-.5-.8-.8-1.5-.8-2.3 0-1 .4-1.8.9-1.8zm.6 8.3c1 0 1.8.9 1.8 2.1 0 .9-.5 1.7-1.3 2.1l-.5-4.1zm-1.5.3l.5 4.2c-.2.1-.5.1-.7.1-1.7 0-3-1.3-3-3.1 0-1.6 1-2.9 2.5-4.3l.7 3.1z"/></symbol>
   <symbol id="apple" viewBox="0 0 24 24"><path fill="currentColor" d="M17.05 12.04c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.71-3.19-1.73-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.1 8.79.73 1.06 1.6 2.25 2.74 2.21 1.1-.05 1.52-.71 2.85-.71 1.33 0 1.71.71 2.88.69 1.19-.02 1.94-1.08 2.67-2.15.84-1.23 1.19-2.42 1.21-2.48-.03-.01-2.32-.89-2.34-3.53zM14.88 5.6c.61-.74 1.02-1.77.91-2.8-.88.04-1.94.59-2.57 1.32-.56.65-1.06 1.7-.93 2.7.98.08 1.98-.5 2.59-1.22z"/></symbol>
-  <symbol id="i-note" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="16" cy="16" r="3" fill="currentColor"/></symbol>
-  <symbol id="i-ear" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 12a8 8 0 1 1 11 7.4M9 12a3 3 0 1 1 6 0c0 2-2 2.5-2 4.5M11 21h.01"/></symbol>
-  <symbol id="i-piano" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" d="M9 5v9M15 5v9M3 14h18"/></symbol>
-  <symbol id="i-tuner" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 18a8 8 0 1 1 16 0"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 18l4-6"/><circle cx="12" cy="18" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="16" cy="16" r="3" fill="currentColor"/></symbol>
+  <symbol id="i-ear" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M4 12a8 8 0 1 1 11 7.4M9 12a3 3 0 1 1 6 0c0 2-2 2.5-2 4.5M11 21h.01"/></symbol>
+  <symbol id="i-piano" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" d="M9 5v9M15 5v9M3 14h18"/></symbol>
+  <symbol id="i-tuner" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M4 18a8 8 0 1 1 16 0"/><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 18l4-6"/><circle cx="12" cy="18" r="1.6" fill="currentColor"/></symbol>
   <symbol id="i-flame" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c0-1-.5-2-1-2.5C15 11 16 13 16 15a4 4 0 1 1-8 0c0-5 4-8 4-13z"/></symbol>
-  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 9h18M8 3v4M16 3v4M8 14l2 2 4-4"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 9h18M8 3v4M16 3v4M8 14l2 2 4-4"/></symbol>
 </svg>
 
 <nav><div class="wrap nav">
-  <div class="logo"><svg class="clef"><use href="#clef"/></svg><b class="display">Klef</b></div>
-  <div class="nav-r"><a href="#features" class="lk">Özellikler</a><a href="#cof" class="lk">Keşfet</a><a href="https://apps.apple.com/app/id6773070466" class="btn btn-p">İndir</a></div>
+  <div class="logo"><svg class="clef"><use href="#clef"/></svg><b class="serif">Klef</b></div>
+  <div class="nav-r"><a href="#repertoire" class="lk">Özellikler</a><a href="#theory" class="lk">Teori</a><a href="https://apps.apple.com/app/id6773070466" class="pillbtn gold mag">İndir</a></div>
 </div></nav>
 
 <header>
-  <div class="notes" id="notes"></div>
+  <svg class="bigclef" viewBox="0 0 24 24"><use href="#clef"/></svg>
   <div class="wrap hero">
-    <div>
-      <span class="pill">🎼 App Store'da · 5 dilde <span class="eq"><i></i><i></i><i></i><i></i><i></i></span></span>
-      <h1 class="display"><span class="w">Müziği</span> <span class="w grad">oyun&nbsp;gibi</span> <span class="w">öğren.</span></h1>
-      <p class="lead rv">Nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada geliştir. Konservatuvar pedagojisiyle tasarlandı — cebinde küçük bir konservatuvar.</p>
-      <div class="cta rv d1">
-        <a href="https://apps.apple.com/app/id6773070466" class="appstore"><svg><use href="#apple"/></svg><span><span class="a1">App Store'dan</span><br><span class="a2">İNDİR</span></span></a>
-        <a href="#features" class="ghost">Neler var? →</a>
-      </div>
-      <div class="trust rv d2"><span class="stars">★★★★★</span><span>Gerçek öğretmenlerle test edildi</span><span>🇹🇷 🇬🇧 🇪🇸 🇩🇪 🇫🇷</span></div>
+    <h1 class="serif">
+      <span class="w">Notalar</span> <span class="w">artık bir</span><br>
+      <span class="w"><span class="underw"><em>yabancı</em><svg viewBox="0 0 220 12" preserveAspectRatio="none"><path d="M4 8 Q60 1 120 6 T216 5"/></svg></span></span> <span class="w">değil.</span>
+    </h1>
+    <p class="lead rv d1"><span class="drop">Müziği oyun gibi öğren.</span> Nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada geliştir — konservatuvar pedagojisiyle tasarlanmış, cebinde küçük bir konservatuvar.</p>
+    <div class="cta rv d2">
+      <a href="https://apps.apple.com/app/id6773070466" class="appstore mag"><svg><use href="#apple"/></svg><span><span class="a1">App Store'dan</span><br><span class="a2">İNDİR</span></span></a>
+      <a href="#excerpt" class="ghost"><span class="pl"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>Nasıl çalışır?</a>
     </div>
-    <div class="phone-wrap rv d2">
-      <div class="fcard f1"><span class="em">🔥</span> 12 günlük seri!</div>
-      <div class="fcard f2"><span class="em">✓</span> +50 XP kazandın</div>
-      <div class="phone">
-        <span class="vol v1"></span><span class="vol v2"></span><span class="pw"></span>
-        <div class="screen"><div class="island"></div>
-          <div class="sp">
-            <div class="topl">🎼 Çalışma · Sol Anahtarı</div>
-            <div class="sbar"><span class="chip h">♥ 5</span><span class="chip s">🔥 12</span><span class="chip x">✦ 1.240</span></div>
-            <div class="qcard"><div class="ql">Bu nota hangisi?</div>
-              <svg viewBox="0 0 248 104" style="width:100%;display:block;margin:2px 0 4px">
-                <defs>
-                  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                  <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5cd6a"/><stop offset="1" stop-color="#caa24a"/></linearGradient>
-                </defs>
-                <g stroke="rgba(255,255,255,.24)" stroke-width="1.5" stroke-linecap="round"><line x1="12" y1="28" x2="238" y2="28"/><line x1="12" y1="42" x2="238" y2="42"/><line x1="12" y1="56" x2="238" y2="56"/><line x1="12" y1="70" x2="238" y2="70"/><line x1="12" y1="84" x2="238" y2="84"/></g>
-                <use href="#clef" transform="translate(6,14) scale(3.1)" style="color:#f5cd6a" opacity=".95"/>
-                <g fill="url(#gg)">
-                  <g><ellipse cx="104" cy="70" rx="7" ry="5" transform="rotate(-20 104 70)"/><rect x="109.4" y="42" width="2.2" height="28" rx="1"/></g>
-                  <g><ellipse cx="184" cy="63" rx="7" ry="5" transform="rotate(-20 184 63)"/><rect x="189.4" y="35" width="2.2" height="28" rx="1"/></g>
-                  <g><ellipse cx="218" cy="49" rx="7" ry="5" transform="rotate(-20 218 49)"/><rect x="223.4" y="21" width="2.2" height="28" rx="1"/></g>
-                </g>
-                <g filter="url(#glow)"><ellipse cx="144" cy="42" rx="7.6" ry="5.4" transform="rotate(-20 144 42)" fill="#fff"/><rect x="149.6" y="14" width="2.4" height="28" rx="1.2" fill="#fff"/></g>
-                <circle cx="144" cy="42" fill="none" stroke="#fff" stroke-width="1.8"><animate attributeName="r" values="13;18;13" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;.2;.7" dur="1.6s" repeatCount="indefinite"/></circle>
-              </svg>
-              <div class="playb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
-            </div>
-            <div class="ans"><div class="a">Do</div><div class="a ok">Re ✓</div><div class="a">Mi</div><div class="a">Fa</div></div>
-            <div class="prog"><i></i></div>
-            <div style="text-align:center;margin-top:13px;font-size:11px;color:var(--ink3);font-weight:700">7 / 12 doğru · Seviye 4</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="trust rv d3"><span class="stars">★★★★★</span><span>Gerçek öğretmenlerle test edildi</span><span class="flags">🇹🇷 🇬🇧 🇪🇸 🇩🇪 🇫🇷</span></div>
   </div>
+
+  <!-- SIGNATURE SCORE STRIP -->
+  <div class="scoreband"><div class="wrap inner rv">
+    <svg class="staffsvg" viewBox="0 0 1120 130" preserveAspectRatio="xMidYMid meet" id="staff">
+      <g stroke="rgba(19,23,58,.22)" stroke-width="1.4">
+        <line x1="0" y1="34" x2="1120" y2="34"/><line x1="0" y1="50" x2="1120" y2="50"/><line x1="0" y1="66" x2="1120" y2="66"/><line x1="0" y1="82" x2="1120" y2="82"/><line x1="0" y1="98" x2="1120" y2="98"/>
+      </g>
+      <use href="#clef" transform="translate(8,24) scale(3.4)" style="color:var(--ink)" opacity=".82"/>
+      <g class="serif" fill="rgba(19,23,58,.6)" font-size="34" font-weight="600"><text x="74" y="62">4</text><text x="74" y="94">4</text></g>
+      <!-- notes -->
+      <g id="notes" fill="var(--ink)">
+        <g data-n><ellipse cx="160" cy="98" rx="8.4" ry="6" transform="rotate(-18 160 98)"/><rect x="167" y="62" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="250" cy="82" rx="8.4" ry="6" transform="rotate(-18 250 82)"/><rect x="257" y="46" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="340" cy="74" rx="8.4" ry="6" transform="rotate(-18 340 74)"/><rect x="347" y="38" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="430" cy="58" rx="8.4" ry="6" transform="rotate(-18 430 58)"/><rect x="437" y="22" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="540" cy="50" rx="8.4" ry="6" transform="rotate(-18 540 50)"/><rect x="547" y="14" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="650" cy="58" rx="8.4" ry="6" transform="rotate(-18 650 58)"/><rect x="657" y="22" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="760" cy="74" rx="8.4" ry="6" transform="rotate(-18 760 74)"/><rect x="767" y="38" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="870" cy="66" rx="8.4" ry="6" transform="rotate(-18 870 66)"/><rect x="877" y="30" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="980" cy="82" rx="8.4" ry="6" transform="rotate(-18 980 82)"/><rect x="987" y="46" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="1070" cy="66" rx="8.4" ry="6" transform="rotate(-18 1070 66)"/><rect x="1077" y="30" width="2.4" height="36"/></g>
+      </g>
+      <line class="ph" id="playhead" x1="120" y1="20" x2="120" y2="112"/>
+    </svg>
+  </div></div>
 </header>
 
-<!-- STATS -->
-<section style="padding:30px 0 0"><div class="wrap"><div class="stats">
-  <div class="stat rv"><div class="num"><span data-c="30">0</span></div><div class="lab">günlük program</div></div>
-  <div class="stat rv d1"><div class="num"><span data-c="4">0</span></div><div class="lab">anahtar (Sol/Fa/Do)</div></div>
-  <div class="stat rv d2"><div class="num"><span data-c="5">0</span></div><div class="lab">dil</div></div>
-  <div class="stat rv d3"><div class="num">∞</div><div class="lab">pratik & oyun</div></div>
-</div></div></section>
-
-<div class="marquee"><div class="track"><span>🎵 Nota Okuma</span><span>👂 <b>Kulak Eğitimi</b></span><span>🎹 Akorlar</span><span>🎸 Gamlar & Modlar</span><span>⭕ <b>Beşli Çemberi</b></span><span>🎚️ Akort & Metronom</span><span>🎤 Vokal</span><span>🔥 <b>Seriler & Ligler</b></span><span>🎵 Nota Okuma</span><span>👂 <b>Kulak Eğitimi</b></span><span>🎹 Akorlar</span><span>🎸 Gamlar & Modlar</span><span>⭕ <b>Beşli Çemberi</b></span><span>🎚️ Akort & Metronom</span><span>🎤 Vokal</span><span>🔥 <b>Seriler & Ligler</b></span></div></div>
-
-<!-- FEATURES -->
-<section id="features"><div class="wrap">
-  <div class="eyebrow rv">Neler öğrenirsin</div>
-  <div class="sec-h rv d1"><h2 class="display">Tek uygulama, koca bir <span class="g">konservatuvar</span></h2><p>Oyunlaştırılmış, kısa ve etkili. Her gün birkaç dakika yeter.</p></div>
-  <div class="grid" id="featgrid">
-    <div class="feat rv"><div class="ic" style="background:linear-gradient(140deg,rgba(245,205,106,.28),transparent);color:var(--gold)"><svg><use href="#i-note"/></svg></div><h3>Nota Okuma</h3><p>Sol, Fa ve Do anahtarlarında refleksle, akıcı deşifre. Sıfırdan ustalığa.</p></div>
-    <div class="feat rv d1"><div class="ic" style="background:linear-gradient(140deg,rgba(154,123,255,.28),transparent);color:var(--violet)"><svg><use href="#i-ear"/></svg></div><h3>Kulak Eğitimi</h3><p>Aralıklar ve akorlar — duyduğunu tanı, yalnızca gördüğünü değil.</p></div>
-    <div class="feat rv d2"><div class="ic" style="background:linear-gradient(140deg,rgba(95,227,192,.28),transparent);color:var(--mint)"><svg><use href="#i-piano"/></svg></div><h3>Akor Laboratuvarı</h3><p>Akorlar, gamlar, modlar, beşli çemberi ve progresyonlar elinin altında.</p></div>
-    <div class="feat rv"><div class="ic" style="background:linear-gradient(140deg,rgba(90,169,255,.28),transparent);color:var(--blue)"><svg><use href="#i-tuner"/></svg></div><h3>Pro Araçlar</h3><p>Kararlı akort aleti, metronom ve vokal eğitici — hepsi içinde.</p></div>
-    <div class="feat rv d1"><div class="ic" style="background:linear-gradient(140deg,rgba(255,122,156,.28),transparent);color:var(--coral)"><svg><use href="#i-flame"/></svg></div><h3>Oyun Gibi</h3><p>Seriler, görevler, haftalık ligler ve sertifikalar — devam etmek istersin.</p></div>
-    <div class="feat rv d2"><div class="ic" style="background:linear-gradient(140deg,rgba(245,205,106,.28),transparent);color:var(--gold)"><svg><use href="#i-cal"/></svg></div><h3>30 Günde Oku</h3><p>Net hedefli program: adım adım, 30 günde akıcı nota okumaya ulaş.</p></div>
+<!-- REPERTOIRE (features as movements) -->
+<section id="repertoire"><div class="wrap">
+  <div class="sec-head rv"><span class="label">Özellikler</span><h2 class="serif">Tek uygulama, <em>koca bir konservatuvar.</em></h2><p>Her gün birkaç dakika. Sıfırdan ustalığa, adım adım.</p></div>
+  <div class="moves">
+    <div class="move rv"><div class="rn">I</div><div><div class="mt"><h3>Nota Okuma</h3></div><p>Sol, Fa ve Do anahtarlarında refleksle, akıcı deşifre.</p></div><div class="ic"><svg><use href="#i-note"/></svg></div></div>
+    <div class="move rv"><div class="rn">II</div><div><div class="mt"><h3>Kulak Eğitimi</h3></div><p>Aralıklar ve akorlar — duyduğunu tanı, yalnızca gördüğünü değil.</p></div><div class="ic"><svg><use href="#i-ear"/></svg></div></div>
+    <div class="move rv"><div class="rn">III</div><div><div class="mt"><h3>Akor Laboratuvarı</h3></div><p>Akorlar, gamlar, modlar, beşli çemberi ve progresyonlar elinin altında.</p></div><div class="ic"><svg><use href="#i-piano"/></svg></div></div>
+    <div class="move rv"><div class="rn">IV</div><div><div class="mt"><h3>Pro Araçlar</h3></div><p>Kararlı akort aleti, metronom ve vokal eğitici — hepsi içinde.</p></div><div class="ic"><svg><use href="#i-tuner"/></svg></div></div>
+    <div class="move rv"><div class="rn">V</div><div><div class="mt"><h3>Oyun Gibi</h3></div><p>Seriler, görevler, haftalık ligler ve sertifikalar — devam etmek istersin.</p></div><div class="ic"><svg><use href="#i-flame"/></svg></div></div>
+    <div class="move rv"><div class="rn">VI</div><div><div class="mt"><h3>30 Günde Oku</h3></div><p>Net hedefli program: adım adım, 30 günde akıcı nota okumaya ulaş.</p></div><div class="ic"><svg><use href="#i-cal"/></svg></div></div>
   </div>
 </div></section>
 
-<!-- CIRCLE OF FIFTHS SHOWCASE -->
-<section id="cof"><div class="wrap show">
+<!-- APP EXCERPT -->
+<section id="excerpt"><div class="wrap excerpt">
+  <div class="frame rv">
+    <div class="scr">
+      <div class="top">🎼 Çalışma · Sol Anahtarı</div>
+      <div class="bar"><span class="chip h">♥ 5</span><span class="chip s">🔥 12</span><span class="chip x">✦ 1.240</span></div>
+      <div class="q"><div class="ql">Bu nota hangisi?</div>
+        <svg viewBox="0 0 248 96" style="width:100%;display:block">
+          <g stroke="rgba(255,255,255,.26)" stroke-width="1.4"><line x1="12" y1="24" x2="238" y2="24"/><line x1="12" y1="38" x2="238" y2="38"/><line x1="12" y1="52" x2="238" y2="52"/><line x1="12" y1="66" x2="238" y2="66"/><line x1="12" y1="80" x2="238" y2="80"/></g>
+          <use href="#clef" transform="translate(8,12) scale(2.9)" style="color:#d8b25a"/>
+          <g fill="#d8b25a"><g><ellipse cx="120" cy="66" rx="7" ry="5" transform="rotate(-20 120 66)"/><rect x="125.4" y="40" width="2.2" height="26"/></g><g><ellipse cx="200" cy="52" rx="7" ry="5" transform="rotate(-20 200 52)"/><rect x="205.4" y="26" width="2.2" height="26"/></g></g>
+          <g><ellipse cx="160" cy="38" rx="7.6" ry="5.4" transform="rotate(-20 160 38)" fill="#fff"/><rect x="165.6" y="12" width="2.4" height="26" fill="#fff"/><circle cx="160" cy="38" r="14" fill="none" stroke="#fff" stroke-width="1.6"><animate attributeName="r" values="12;17;12" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;.2;.7" dur="1.6s" repeatCount="indefinite"/></circle></g>
+        </svg>
+      </div>
+      <div class="ans" style="margin-bottom:12px"><div class="a">Do</div><div class="a ok">Re ✓</div><div class="a">Mi</div><div class="a">Fa</div></div>
+      <div class="prog"><i></i></div>
+    </div>
+  </div>
+  <div class="excerpt-txt rv d1">
+    <span class="label">Uygulamadan bir kesit</span>
+    <h2 class="serif" style="margin-top:12px">Gör, <em>duy,</em> dokun — öğren.</h2>
+    <p>Her soru kısa bir performans gibi: notayı gör, sesini duy, doğru cevabı seç. Doğru çaldıkça seri büyür, seviye atlarsın.</p>
+    <p>Konservatuvar müfredatı, oyunun ritmiyle. Birkaç dakikalık seanslar kalıcı bir alışkanlığa dönüşür.</p>
+  </div>
+</div></section>
+
+<!-- THEORY / CIRCLE OF FIFTHS -->
+<section id="theory"><div class="wrap show">
   <div class="cof rv">
-    <div class="cof-disc"></div>
-    <div class="cof-ring">
+    <svg class="ring" viewBox="0 0 320 320"><circle cx="160" cy="160" r="150" fill="none" stroke="var(--rule)" stroke-width="1"/><circle cx="160" cy="160" r="118" fill="none" stroke="var(--line)" stroke-width="1"/></svg>
+    <div class="ring">
       <div class="cn maj" style="--i:0">C</div><div class="cn maj" style="--i:1">G</div><div class="cn maj" style="--i:2">D</div><div class="cn maj" style="--i:3">A</div>
       <div class="cn maj" style="--i:4">E</div><div class="cn maj" style="--i:5">B</div><div class="cn" style="--i:6">F♯</div><div class="cn" style="--i:7">D♭</div>
       <div class="cn" style="--i:8">A♭</div><div class="cn" style="--i:9">E♭</div><div class="cn" style="--i:10">B♭</div><div class="cn maj" style="--i:11">F</div>
     </div>
-    <div class="cof-hub"><svg><use href="#clef"/></svg></div>
+    <div class="hub"><svg><use href="#clef"/></svg></div>
   </div>
   <div class="show-txt rv d1">
-    <div class="eyebrow" style="text-align:left">İnteraktif teori</div>
-    <h2 class="display">Müziğin haritasını <span class="g">elinle keşfet</span></h2>
-    <p>Beşli çemberi, akorlar, gamlar ve modlar — kuru ezber değil, dokunarak, duyarak. Tonaliteler arasındaki ilişkiyi gör; her şey yerine otursun.</p>
-    <p>Akor Laboratuvarı'nda piyano ve gitar üzerinde dene, çal, duy.</p>
+    <span class="label">Teori, görünür hale geliyor</span>
+    <h2 class="serif" style="font-size:clamp(30px,4vw,48px);margin:12px 0 16px;font-weight:600;line-height:1.04">Müziğin haritasını <em>elinle keşfet.</em></h2>
+    <p style="color:var(--ink2);font-size:17px;margin-bottom:14px">Beşli çemberi, akorlar, gamlar ve modlar — kuru ezber değil, dokunarak, duyarak. Tonaliteler arasındaki ilişkiyi gör; her şey yerine otursun.</p>
+    <p style="color:var(--ink2);font-size:17px">Akor Laboratuvarı'nda piyano ve gitar üzerinde dene, çal, duy.</p>
     <div class="tagrow"><span class="tag">Beşli Çemberi</span><span class="tag">Akorlar</span><span class="tag">Modlar</span><span class="tag">Progresyon</span><span class="tag">İnversiyon</span></div>
   </div>
 </div></section>
 
-<!-- TEACHERS -->
-<section><div class="wrap"><div class="band rv">
-  <h2 class="display">Öğretmenler için tasarlandı</h2>
-  <p>Konservatuvar pedagojisiyle kuruldu, gerçek öğretmen ve öğrencilerle test edildi. Sınıfını yönet, öğrencilerinin gelişimini takip et, ödev ver.</p>
-  <a href="https://apps.apple.com/app/id6773070466" class="btn btn-p" style="font-size:16px">Ücretsiz Dene</a>
+<!-- TEACHERS — pull quote -->
+<section><div class="wrap quote rv">
+  <div class="qm">”</div>
+  <blockquote class="serif">Konservatuvar pedagojisiyle kuruldu, gerçek öğretmen ve öğrencilerle <em>test edildi.</em> Sınıfını yönet, gelişimi takip et, ödev ver.</blockquote>
+  <div class="by">— Öğretmenler için tasarlandı</div>
+  <a href="https://apps.apple.com/app/id6773070466" class="pillbtn gold mag" style="margin-top:26px">Ücretsiz Dene</a>
 </div></div></section>
 
-<!-- FINAL -->
-<section><div class="wrap final">
-  <div class="notes" id="notes2" style="height:200px;top:-30px"></div>
-  <h2 class="display rv">Bir dakikada <span class="g">ilk notanı oku.</span></h2>
-  <p class="rv d1">Bugün başla — alışkanlığa dönüşsün, kalıcı olsun.</p>
-  <a href="https://apps.apple.com/app/id6773070466" class="appstore rv d2" style="margin:0 auto"><svg><use href="#apple"/></svg><span><span class="a1">App Store'dan</span><br><span class="a2">İNDİR</span></span></a>
+<!-- CODA -->
+<section><div class="wrap coda rv">
+  <h2 class="serif">Bugün <em>ilk notanı</em> oku.</h2>
+  <p>Bir dakikada başla — alışkanlığa dönüşsün, kalıcı olsun.</p>
+  <a href="https://apps.apple.com/app/id6773070466" class="appstore mag" style="margin:0 auto"><svg><use href="#apple"/></svg><span><span class="a1">App Store'dan</span><br><span class="a2">İNDİR</span></span></a>
 </div></section>
 
 <footer><div class="wrap foot">
-  <div class="logo"><svg class="clef" style="width:24px;height:24px"><use href="#clef"/></svg><b class="display" style="font-size:21px">Klef</b></div>
+  <div class="logo"><svg class="clef" style="width:22px;height:25px"><use href="#clef"/></svg><b class="serif" style="font-size:22px;font-weight:600">Klef</b></div>
   <div class="foot-links"><a href="https://klefapp.github.io/klef-legal/">Gizlilik</a><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Şartlar</a><a href="mailto:support@klefapp.com">İletişim</a></div>
   <div>© 2026 Ali Dağdöğen</div>
 </div></footer>
 
 <script>
-  // floating notes
-  const G=['♪','♫','♬','♩','𝄞','♭','♮'];
-  function seed(el,n){for(let i=0;i<n;i++){const s=document.createElement('span');s.className='nt';s.textContent=G[Math.floor(Math.random()*G.length)];s.style.left=Math.random()*100+'%';s.style.bottom='-40px';s.style.fontSize=(18+Math.random()*26)+'px';s.style.animationDuration=(9+Math.random()*10)+'s';s.style.animationDelay=(-Math.random()*12)+'s';el.appendChild(s);}}
-  seed(document.getElementById('notes'),14);seed(document.getElementById('notes2'),10);
-
-  // reveal on scroll
+  const RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  // reveal
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
   document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 
-  // count-up
-  const cio=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const el=e.target,t=+el.dataset.c;let v=0;const step=Math.max(1,Math.ceil(t/28));const tk=setInterval(()=>{v+=step;if(v>=t){v=t;clearInterval(tk);}el.textContent=v;},32);cio.unobserve(el);}})},{threshold:.5});
-  document.querySelectorAll('[data-c]').forEach(el=>cio.observe(el));
+  if(!RM){
+    // playhead sweep across the score strip + light up notes as it passes
+    const ph=document.getElementById('playhead');
+    const notes=[...document.querySelectorAll('#notes [data-n]')];
+    const xs=notes.map(n=>+n.querySelector('ellipse').getAttribute('cx'));
+    let x=120;const minX=120,maxX=1100,speed=2.6;
+    function tick(){
+      x+=speed;if(x>maxX)x=minX;
+      ph.setAttribute('x1',x);ph.setAttribute('x2',x);
+      notes.forEach((n,i)=>{const hit=Math.abs(xs[i]-x)<14;
+        n.querySelector('ellipse').setAttribute('fill',hit?'#d8b25a':'var(--ink)');
+        n.style.transform=hit?'translateY(-2px)':'';n.style.transformBox='fill-box';n.style.transition='transform .15s';});
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
 
-  // parallax orbs (mouse)
-  window.addEventListener('mousemove',(e)=>{const x=(e.clientX/innerWidth-.5),y=(e.clientY/innerHeight-.5);document.querySelectorAll('.orb').forEach(o=>{const s=+o.dataset.s;o.style.transform=`translate(${x*40*s}px,${y*40*s}px)`;});},{passive:true});
-
-  // 3D tilt feature cards
-  document.querySelectorAll('.feat').forEach(c=>{
-    c.addEventListener('mousemove',(e)=>{const r=c.getBoundingClientRect();const px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(800px) rotateX(${-py*8}deg) rotateY(${px*8}deg) translateY(-4px)`;});
-    c.addEventListener('mouseleave',()=>{c.style.transform='';});
-  });
+    // magnetic buttons
+    document.querySelectorAll('.mag').forEach(b=>{
+      b.addEventListener('mousemove',(e)=>{const r=b.getBoundingClientRect();const mx=(e.clientX-r.left-r.width/2)/r.width,my=(e.clientY-r.top-r.height/2)/r.height;b.style.transform=`translate(${mx*10}px,${my*10}px)`;});
+      b.addEventListener('mouseleave',()=>{b.style.transform='';});
+    });
+  }
 </script>
 </body>
 </html>
