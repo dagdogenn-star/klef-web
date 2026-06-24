@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Klef — Müziği Oyun Gibi Öğren</title>
 <meta name="description" content="Klef: nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada öğreten uygulama. Konservatuvar pedagojisiyle, oyun gibi.">
-<meta property="og:title" content="Klef — Notalar artık bir yabancı değil">
-<meta property="og:description" content="Nota oku, kulağını eğit, ritmini bul. Cebinde küçük bir konservatuvar.">
+<meta property="og:title" content="Klef — Read music in a minute">
+<meta property="og:description" content="Read notes, train your ear, find your rhythm. A little conservatory in your pocket.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#f4efe3">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,52 +22,50 @@
   html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
   body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
+  img,svg{max-width:100%}
+  h1,h2,h3,p,blockquote{overflow-wrap:break-word}
   .serif{font-family:'Fraunces',Georgia,serif}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 30px}
-  .mk{font-family:'Fraunces',serif;font-style:italic;font-weight:500;color:var(--gold)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(22px,5vw,34px)}
   .label{font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
 
-  /* paper texture + faint staff watermark */
   .paper-tex{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
   .vignette{position:fixed;inset:0;z-index:-1;pointer-events:none;box-shadow:inset 0 0 240px rgba(120,95,50,.14)}
 
-  /* reveal */
   .rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
   .rv.in{opacity:1;transform:none}
-  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
 
-  /* nav */
   nav{position:sticky;top:0;z-index:60;background:rgba(244,239,227,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
   .nav{display:flex;align-items:center;justify-content:space-between;height:74px}
   .logo{display:flex;align-items:center;gap:10px}
   .logo .clef{width:26px;height:30px;color:var(--ink)}
   .logo b{font-size:27px;font-weight:600;letter-spacing:.5px}
-  .nav-r{display:flex;align-items:center;gap:30px}
+  .nav-r{display:flex;align-items:center;gap:26px}
   .nav-r a.lk{font-weight:600;color:var(--ink2);font-size:14.5px;transition:.2s;position:relative}
   .nav-r a.lk:hover{color:var(--ink)}
   .nav-r a.lk::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1.5px;background:var(--gold);transition:width .25s}.nav-r a.lk:hover::after{width:100%}
+  .lang{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;color:var(--ink2);border:1px solid var(--line);padding:7px 13px;border-radius:50px;cursor:pointer;transition:.2s;background:none}
+  .lang:hover{border-color:var(--gold);color:var(--gold)}
   .pillbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;padding:11px 22px;border-radius:50px;background:var(--ink);color:var(--paper);transition:transform .22s,box-shadow .3s;will-change:transform}
   .pillbtn:hover{box-shadow:0 12px 26px rgba(19,23,58,.25)}
   .pillbtn.gold{background:linear-gradient(120deg,var(--goldb),var(--gold));color:#241a07}
 
-  /* ── HERO ── */
-  header{position:relative;padding:30px 0 0;overflow:hidden}
-  .bigclef{position:absolute;right:-40px;top:-30px;width:min(560px,52vw);color:var(--gold);opacity:.13;z-index:0;pointer-events:none}
-  .hero{position:relative;z-index:2;padding:34px 0 20px}
-  .movement{display:flex;align-items:center;gap:14px;margin-bottom:26px}
-  .movement .ln{height:1px;width:54px;background:var(--rule)}
-  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(50px,8.4vw,116px);line-height:.96;letter-spacing:-.02em;max-width:14ch;margin-bottom:0}
+  /* ── HERO (2-col) ── */
+  header{position:relative;padding:18px 0 0;overflow:hidden}
+  .bigclef{position:absolute;right:-70px;top:-20px;width:min(440px,40vw);color:var(--gold);opacity:.06;z-index:0;pointer-events:none}
+  .hero{position:relative;z-index:2;display:grid;grid-template-columns:1.06fr .82fr;gap:50px;align-items:center;padding:28px 0 26px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(44px,5.6vw,82px);line-height:.98;letter-spacing:-.02em;max-width:13ch;margin-bottom:0}
   h1 em{font-style:italic;font-weight:500;color:var(--gold);position:relative}
   h1 .w{display:inline-block;opacity:0;transform:translateY(40px);animation:win .9s cubic-bezier(.2,.8,.2,1) forwards}
-  h1 .w:nth-child(2){animation-delay:.12s}h1 .w:nth-child(3){animation-delay:.24s}h1 .w:nth-child(4){animation-delay:.36s}
+  h1 .w:nth-child(2){animation-delay:.1s}h1 .w:nth-child(3){animation-delay:.2s}h1 .w:nth-child(4){animation-delay:.3s}
   @keyframes win{to{opacity:1;transform:none}}
   .underw{display:inline-block}.underw svg{display:block;width:100%;height:.34em;margin-top:-.06em;overflow:visible}
-  .underw path{stroke:var(--goldb);stroke-width:8;fill:none;stroke-linecap:round;stroke-dasharray:360;stroke-dashoffset:360;animation:draw 1.1s cubic-bezier(.3,.7,.3,1) 1s forwards}
+  .underw path{stroke:var(--goldb);stroke-width:8;fill:none;stroke-linecap:round;stroke-dasharray:360;stroke-dashoffset:360;animation:draw 1.1s cubic-bezier(.3,.7,.3,1) .9s forwards}
   @keyframes draw{to{stroke-dashoffset:0}}
-  .lead{font-size:clamp(17px,1.7vw,20px);color:var(--ink2);max-width:520px;margin:30px 0 32px}
+  .lead{font-size:clamp(16px,1.6vw,19px);color:var(--ink2);max-width:500px;margin:28px 0 30px}
   .lead .drop{font-family:'Fraunces',serif;font-weight:600;font-size:1.05em;color:var(--ink)}
-  .cta{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .cta{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
   .appstore{display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--paper);padding:13px 24px;border-radius:14px;transition:transform .22s,box-shadow .3s;will-change:transform}
   .appstore:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(19,23,58,.28)}
   .appstore svg{width:26px;height:26px;color:var(--paper)}
@@ -75,46 +73,13 @@
   .ghost{display:inline-flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);transition:.2s}
   .ghost .pl{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;transition:.25s}.ghost:hover .pl{background:var(--ink);color:var(--paper)}
   .ghost .pl svg{width:11px;height:11px;margin-left:2px}
-  .trust{margin-top:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:var(--ink3);font-size:14px}
+  .trust{margin-top:30px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:var(--ink3);font-size:13.5px}
   .trust .stars{color:var(--gold);letter-spacing:2px;font-size:15px}
   .flags{font-size:15px;letter-spacing:1px;filter:grayscale(.15)}
 
-  /* ── SIGNATURE: the score strip ── */
-  .scoreband{position:relative;margin-top:46px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(250,246,236,.6),transparent)}
-  .scoreband .inner{position:relative;padding:30px 0 26px}
-  .tempo{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
-  .tempo .t{font-family:'Fraunces',serif;font-style:italic;color:var(--ink2);font-size:15px}
-  .tempo .t b{color:var(--ink);font-style:normal;font-weight:600}
-  .staffsvg{width:100%;height:130px;display:block;overflow:visible}
-  .ph{stroke:var(--goldb);stroke-width:2.4;opacity:.9;filter:drop-shadow(0 0 6px rgba(216,178,90,.7))}
-
-  /* ── sections ── */
-  section{padding:74px 0}
-  .sec-head{max-width:660px;margin-bottom:46px}
-  .sec-head.ctr{margin:0 auto 50px;text-align:center}
-  .sec-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4.8vw,58px);line-height:1.02;letter-spacing:-.015em;margin:14px 0 12px}
-  .sec-head h2 em{font-style:italic;color:var(--gold)}
-  .sec-head p{color:var(--ink2);font-size:17px}
-
-  /* features as movements — editorial rows */
-  .moves{border-top:1px solid var(--line)}
-  .move{display:grid;grid-template-columns:88px 1fr auto;gap:26px;align-items:center;padding:26px 8px;border-bottom:1px solid var(--line);position:relative;transition:padding-left .3s,background .3s}
-  .move::before{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--gold),transparent);transition:width .5s}
-  .move:hover{padding-left:18px;background:linear-gradient(90deg,rgba(176,134,58,.05),transparent)}
-  .move:hover::before{width:100%}
-  .move .rn{font-family:'Fraunces',serif;font-weight:500;font-size:34px;color:var(--gold);line-height:1}
-  .move .mt{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-  .move h3{font-family:'Fraunces',serif;font-weight:600;font-size:25px;letter-spacing:-.01em}
-  .move .tm{font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:15px}
-  .move p{color:var(--ink2);font-size:15.5px;margin-top:5px;max-width:62ch}
-  .move .ic{width:50px;height:50px;color:var(--ink);opacity:.78;transition:.3s}.move:hover .ic{color:var(--gold);opacity:1;transform:scale(1.08)}
-  .move .ic svg{width:34px;height:34px}
-
-  /* app excerpt — framed manuscript card */
-  .excerpt{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-  .frame{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 40px 80px rgba(19,23,58,.16),0 2px 0 rgba(255,255,255,.6) inset;transform:rotate(-1.2deg);transition:transform .4s}
+  /* app card (hero right + reused) */
+  .frame{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 40px 80px rgba(19,23,58,.16),0 2px 0 rgba(255,255,255,.6) inset;transform:rotate(-1.4deg);transition:transform .4s;max-width:380px;margin:0 auto}
   .frame:hover{transform:rotate(0)}
-  .frame::after{content:"♩ = 96";position:absolute;top:-13px;left:24px;background:var(--paper);padding:0 10px;font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:14px}
   .scr{border-radius:13px;overflow:hidden;background:linear-gradient(165deg,#171b46,#0e1130);padding:18px 16px 16px;color:#eef}
   .scr .top{font-size:9px;letter-spacing:2px;font-weight:800;color:var(--goldb);text-transform:uppercase;text-align:center;margin-bottom:10px}
   .scr .bar{display:flex;justify-content:space-between;margin-bottom:14px}
@@ -126,10 +91,30 @@
   .scr .a{padding:11px;border-radius:12px;font-weight:800;font-size:14px;text-align:center;border:1px solid rgba(255,255,255,.09);color:#aeb2da;background:rgba(255,255,255,.04)}
   .scr .a.ok{background:linear-gradient(135deg,#5fe3c0,#33c79f);color:#062019;border-color:transparent}
   .scr .prog{height:6px;border-radius:50px;background:rgba(255,255,255,.08);overflow:hidden}.scr .prog i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--goldb),#ff7a9c,#9a7bff)}
-  .excerpt-txt h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,46px);line-height:1.04;margin-bottom:16px}.excerpt-txt h2 em{font-style:italic;color:var(--gold)}
-  .excerpt-txt p{color:var(--ink2);font-size:17px;margin-bottom:14px}
 
-  /* circle of fifths — engraving */
+  /* score strip */
+  .scoreband{position:relative;margin-top:30px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(250,246,236,.6),transparent)}
+  .scoreband .inner{position:relative;padding:22px 0 20px}
+  .staffsvg{width:100%;height:118px;display:block;overflow:visible}
+  .ph{stroke:var(--goldb);stroke-width:2.4;opacity:.9;filter:drop-shadow(0 0 6px rgba(216,178,90,.7))}
+
+  section{padding:66px 0}
+  .sec-head{max-width:660px;margin-bottom:44px}
+  .sec-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4.8vw,56px);line-height:1.02;letter-spacing:-.015em;margin:14px 0 12px}
+  .sec-head h2 em{font-style:italic;color:var(--gold)}
+  .sec-head p{color:var(--ink2);font-size:17px}
+
+  .moves{border-top:1px solid var(--line)}
+  .move{display:grid;grid-template-columns:78px 1fr auto;gap:26px;align-items:center;padding:26px 8px;border-bottom:1px solid var(--line);position:relative;transition:padding-left .3s,background .3s}
+  .move::before{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--gold),transparent);transition:width .5s}
+  .move:hover{padding-left:18px;background:linear-gradient(90deg,rgba(176,134,58,.05),transparent)}
+  .move:hover::before{width:100%}
+  .move .rn{font-family:'Fraunces',serif;font-weight:500;font-size:32px;color:var(--gold);line-height:1}
+  .move h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;letter-spacing:-.01em}
+  .move p{color:var(--ink2);font-size:15.5px;margin-top:5px;max-width:62ch}
+  .move .ic{width:50px;height:50px;color:var(--ink);opacity:.78;transition:.3s}.move:hover .ic{color:var(--gold);opacity:1;transform:scale(1.08)}
+  .move .ic svg{width:34px;height:34px}
+
   .show{display:grid;grid-template-columns:.95fr 1.05fr;gap:60px;align-items:center}
   .cof{position:relative;width:320px;height:320px;margin:0 auto}
   .cof svg.ring{position:absolute;inset:0;animation:spin 50s linear infinite}
@@ -138,34 +123,56 @@
   .cof .cn.maj{color:var(--goldd);border-color:var(--rule)}
   .cof .hub{position:absolute;top:50%;left:50%;width:96px;height:96px;margin:-48px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 38% 32%,#1a1e48,#0e1130);box-shadow:0 14px 34px rgba(19,23,58,.3);z-index:2}
   .cof .hub svg{width:46px;height:46px;color:var(--goldb)}
+  .show-txt h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,48px);line-height:1.04;margin:12px 0 16px}.show-txt h2 em{font-style:italic;color:var(--gold)}
+  .show-txt p{color:var(--ink2);font-size:17px;margin-bottom:14px}
   .tagrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
   .tag{font-size:13px;font-weight:600;padding:7px 15px;border-radius:50px;border:1px solid var(--line);color:var(--ink2);transition:.2s}.tag:hover{border-color:var(--gold);color:var(--gold)}
 
-  /* teachers — pull quote */
   .quote{position:relative;text-align:center;max-width:860px;margin:0 auto;padding:0 10px}
-  .quote .qm{font-family:'Fraunces',serif;font-size:120px;line-height:.5;color:var(--gold);opacity:.4;height:60px}
-  .quote blockquote{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,3.5vw,40px);line-height:1.28;letter-spacing:-.01em;margin-bottom:24px}
+  .quote .qm{font-family:'Fraunces',serif;font-size:110px;line-height:.5;color:var(--gold);opacity:.4;height:54px}
+  .quote blockquote{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(25px,3.4vw,38px);line-height:1.3;letter-spacing:-.01em;margin-bottom:22px}
   .quote blockquote em{font-style:italic;color:var(--gold)}
   .quote .by{color:var(--ink2);font-size:15px;font-weight:600}
 
-  /* coda */
   .coda{text-align:center;position:relative}
-  .coda h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(40px,6vw,82px);line-height:1;letter-spacing:-.02em;margin:14px 0 18px}.coda h2 em{font-style:italic;color:var(--gold)}
-  .coda p{color:var(--ink2);font-size:18px;margin-bottom:34px}
-  .fermata{font-size:40px;color:var(--gold);line-height:1}
+  .coda h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(38px,5.6vw,78px);line-height:1;letter-spacing:-.02em;margin-bottom:18px}.coda h2 em{font-style:italic;color:var(--gold)}
+  .coda p{color:var(--ink2);font-size:18px;margin-bottom:32px}
 
   footer{border-top:1px solid var(--line);padding:40px 0;margin-top:30px}
   .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;color:var(--ink3);font-size:14px}
   .foot a{transition:.2s}.foot a:hover{color:var(--gold)}.foot-links{display:flex;gap:24px;flex-wrap:wrap}
-  .fin{font-family:'Fraunces',serif;font-style:italic;color:var(--gold)}
+  .foot .mail{color:var(--ink2);font-weight:600}
 
+  /* tablet / small */
   @media(max-width:900px){
-    .excerpt,.show{grid-template-columns:1fr;gap:40px}
-    .show-txt,.excerpt-txt{text-align:center}.tagrow{justify-content:center}
+    header{padding:8px 0 0}
+    .hero{grid-template-columns:1fr;gap:36px;text-align:center}
+    .hero>*{min-width:0}.hero .col-l{order:1}.hero .frame{order:2}
+    h1{max-width:none;margin:0 auto}.lead{margin-left:auto;margin-right:auto}.cta,.trust{justify-content:center}
+    .show{grid-template-columns:1fr;gap:40px}.show-txt{text-align:center}.tagrow{justify-content:center}
     .sec-head{text-align:center;margin-left:auto;margin-right:auto}
-    .nav-r a.lk{display:none}.bigclef{opacity:.08}
-    .move{grid-template-columns:54px 1fr;gap:16px}.move .ic{display:none}
+    .nav-r a.lk{display:none}.bigclef{display:none}
+    .move>*{min-width:0}.move{grid-template-columns:44px 1fr;gap:16px}.move .ic{display:none}
     .frame{transform:none}}
+  /* phones */
+  @media(max-width:560px){
+    nav .nav{height:64px}.nav-r{gap:14px}.logo b{font-size:24px}
+    .lang{padding:6px 11px;font-size:12px}.pillbtn{padding:10px 18px;font-size:14px}
+    .hero{padding:18px 0 22px;gap:30px}
+    h1{font-size:clamp(34px,10.5vw,46px);line-height:1.02}
+    .lead{font-size:16px;margin:22px auto 26px}
+    .cta{gap:13px}.appstore{padding:12px 20px}
+    .trust{margin-top:24px;gap:10px;font-size:12.5px;justify-content:center}
+    .frame{max-width:340px}
+    section{padding:50px 0}
+    .sec-head{margin-bottom:34px}
+    .sec-head h2{font-size:clamp(28px,8.5vw,38px)}
+    .move{padding:22px 2px;grid-template-columns:38px 1fr;gap:14px}
+    .move .rn{font-size:26px}.move h3{font-size:20px}.move p{font-size:14.5px;margin-top:4px}
+    .show{gap:32px}.cof{width:280px;height:280px}.cof .cn{transform:rotate(calc(var(--i)*30deg)) translateY(-116px)}
+    .quote .qm{font-size:88px;height:44px}.quote blockquote{font-size:22px}
+    .coda h2{font-size:clamp(32px,11vw,46px)}.coda p{font-size:16px}
+    .foot{justify-content:center;text-align:center;flex-direction:column;gap:14px}.foot-links{justify-content:center}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}.underw path{stroke-dashoffset:0}h1 .w{opacity:1;transform:none}}
 </style>
 </head>
@@ -185,86 +192,80 @@
 
 <nav><div class="wrap nav">
   <div class="logo"><svg class="clef"><use href="#clef"/></svg><b class="serif">Klef</b></div>
-  <div class="nav-r"><a href="#repertoire" class="lk">Özellikler</a><a href="#theory" class="lk">Teori</a><a href="https://apps.apple.com/app/id6773070466" class="pillbtn gold mag">İndir</a></div>
+  <div class="nav-r">
+    <a href="#features" class="lk" data-en="Features">Özellikler</a>
+    <a href="#theory" class="lk" data-en="Theory">Teori</a>
+    <button class="lang" id="langBtn">🌐 <span id="langLabel">EN</span></button>
+    <a href="https://apps.apple.com/app/id6773070466" class="pillbtn gold mag" data-en="Get it">İndir</a>
+  </div>
 </div></nav>
 
 <header>
   <svg class="bigclef" viewBox="0 0 24 24"><use href="#clef"/></svg>
   <div class="wrap hero">
-    <h1 class="serif">
-      <span class="w">Notalar</span> <span class="w">artık bir</span><br>
-      <span class="w"><span class="underw"><em>yabancı</em><svg viewBox="0 0 220 12" preserveAspectRatio="none"><path d="M4 8 Q60 1 120 6 T216 5"/></svg></span></span> <span class="w">değil.</span>
-    </h1>
-    <p class="lead rv d1"><span class="drop">Müziği oyun gibi öğren.</span> Nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada geliştir — konservatuvar pedagojisiyle tasarlanmış, cebinde küçük bir konservatuvar.</p>
-    <div class="cta rv d2">
-      <a href="https://apps.apple.com/app/id6773070466" class="appstore mag"><svg><use href="#apple"/></svg><span><span class="a1">App Store'dan</span><br><span class="a2">İNDİR</span></span></a>
-      <a href="#excerpt" class="ghost"><span class="pl"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>Nasıl çalışır?</a>
+    <div class="col-l">
+      <h1 class="serif" data-en='<span class="w">Notes are</span> <span class="w">no longer</span> <span class="w"><span class="underw"><em>strangers</em><svg viewBox="0 0 220 12" preserveAspectRatio="none"><path d="M4 8 Q60 1 120 6 T216 5"/></svg></span></span> <span class="w">to you.</span>'>
+        <span class="w">Notalar</span> <span class="w">artık bir</span> <span class="w"><span class="underw"><em>yabancı</em><svg viewBox="0 0 220 12" preserveAspectRatio="none"><path d="M4 8 Q60 1 120 6 T216 5"/></svg></span></span> <span class="w">değil.</span>
+      </h1>
+      <p class="lead rv d1" data-en='<span class="drop">Learn music like a game.</span> Build your sight-reading, ear and rhythm in just a few minutes a day — designed with conservatory pedagogy, a little conservatory in your pocket.'><span class="drop">Müziği oyun gibi öğren.</span> Nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada geliştir — konservatuvar pedagojisiyle tasarlanmış, cebinde küçük bir konservatuvar.</p>
+      <div class="cta rv d2">
+        <a href="https://apps.apple.com/app/id6773070466" class="appstore mag"><svg><use href="#apple"/></svg><span><span class="a1" data-en="Download on the">App Store'dan</span><br><span class="a2" data-en="APP STORE">İNDİR</span></span></a>
+        <a href="#features" class="ghost"><span class="pl"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span data-en="How it works?">Nasıl çalışır?</span></a>
+      </div>
+      <div class="trust rv d3"><span class="stars">★★★★★</span><span data-en="Tested with real teachers">Gerçek öğretmenlerle test edildi</span><span class="flags">🇹🇷 🇬🇧 🇪🇸 🇩🇪 🇫🇷</span></div>
     </div>
-    <div class="trust rv d3"><span class="stars">★★★★★</span><span>Gerçek öğretmenlerle test edildi</span><span class="flags">🇹🇷 🇬🇧 🇪🇸 🇩🇪 🇫🇷</span></div>
+    <div class="frame rv d2">
+      <div class="scr">
+        <div class="top" data-en="🎼 Practice · Treble Clef">🎼 Çalışma · Sol Anahtarı</div>
+        <div class="bar"><span class="chip h">♥ 5</span><span class="chip s">🔥 12</span><span class="chip x">✦ 1.240</span></div>
+        <div class="q"><div class="ql" data-en="Which note is this?">Bu nota hangisi?</div>
+          <svg viewBox="0 0 248 96" style="width:100%;display:block">
+            <g stroke="rgba(255,255,255,.26)" stroke-width="1.4"><line x1="12" y1="24" x2="238" y2="24"/><line x1="12" y1="38" x2="238" y2="38"/><line x1="12" y1="52" x2="238" y2="52"/><line x1="12" y1="66" x2="238" y2="66"/><line x1="12" y1="80" x2="238" y2="80"/></g>
+            <use href="#clef" transform="translate(8,12) scale(2.9)" style="color:#d8b25a"/>
+            <g fill="#d8b25a"><g><ellipse cx="120" cy="66" rx="7" ry="5" transform="rotate(-20 120 66)"/><rect x="125.4" y="40" width="2.2" height="26"/></g><g><ellipse cx="200" cy="52" rx="7" ry="5" transform="rotate(-20 200 52)"/><rect x="205.4" y="26" width="2.2" height="26"/></g></g>
+            <g><ellipse cx="160" cy="38" rx="7.6" ry="5.4" transform="rotate(-20 160 38)" fill="#fff"/><rect x="165.6" y="12" width="2.4" height="26" fill="#fff"/><circle cx="160" cy="38" r="14" fill="none" stroke="#fff" stroke-width="1.6"><animate attributeName="r" values="12;17;12" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;.2;.7" dur="1.6s" repeatCount="indefinite"/></circle></g>
+          </svg>
+        </div>
+        <div class="ans" style="margin-bottom:12px"><div class="a">Do</div><div class="a ok">Re ✓</div><div class="a">Mi</div><div class="a">Fa</div></div>
+        <div class="prog"><i></i></div>
+      </div>
+    </div>
   </div>
 
-  <!-- SIGNATURE SCORE STRIP -->
   <div class="scoreband"><div class="wrap inner rv">
-    <svg class="staffsvg" viewBox="0 0 1120 130" preserveAspectRatio="xMidYMid meet" id="staff">
+    <svg class="staffsvg" viewBox="0 0 1120 118" preserveAspectRatio="xMidYMid meet" id="staff">
       <g stroke="rgba(19,23,58,.22)" stroke-width="1.4">
-        <line x1="0" y1="34" x2="1120" y2="34"/><line x1="0" y1="50" x2="1120" y2="50"/><line x1="0" y1="66" x2="1120" y2="66"/><line x1="0" y1="82" x2="1120" y2="82"/><line x1="0" y1="98" x2="1120" y2="98"/>
+        <line x1="0" y1="28" x2="1120" y2="28"/><line x1="0" y1="44" x2="1120" y2="44"/><line x1="0" y1="60" x2="1120" y2="60"/><line x1="0" y1="76" x2="1120" y2="76"/><line x1="0" y1="92" x2="1120" y2="92"/>
       </g>
-      <use href="#clef" transform="translate(8,24) scale(3.4)" style="color:var(--ink)" opacity=".82"/>
-      <g class="serif" fill="rgba(19,23,58,.6)" font-size="34" font-weight="600"><text x="74" y="62">4</text><text x="74" y="94">4</text></g>
-      <!-- notes -->
+      <use href="#clef" transform="translate(8,18) scale(3.4)" style="color:var(--ink)" opacity=".82"/>
+      <g class="serif" fill="rgba(19,23,58,.55)" font-size="32" font-weight="600"><text x="74" y="56">4</text><text x="74" y="88">4</text></g>
       <g id="notes" fill="var(--ink)">
-        <g data-n><ellipse cx="160" cy="98" rx="8.4" ry="6" transform="rotate(-18 160 98)"/><rect x="167" y="62" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="250" cy="82" rx="8.4" ry="6" transform="rotate(-18 250 82)"/><rect x="257" y="46" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="340" cy="74" rx="8.4" ry="6" transform="rotate(-18 340 74)"/><rect x="347" y="38" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="430" cy="58" rx="8.4" ry="6" transform="rotate(-18 430 58)"/><rect x="437" y="22" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="540" cy="50" rx="8.4" ry="6" transform="rotate(-18 540 50)"/><rect x="547" y="14" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="650" cy="58" rx="8.4" ry="6" transform="rotate(-18 650 58)"/><rect x="657" y="22" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="760" cy="74" rx="8.4" ry="6" transform="rotate(-18 760 74)"/><rect x="767" y="38" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="870" cy="66" rx="8.4" ry="6" transform="rotate(-18 870 66)"/><rect x="877" y="30" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="980" cy="82" rx="8.4" ry="6" transform="rotate(-18 980 82)"/><rect x="987" y="46" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="1070" cy="66" rx="8.4" ry="6" transform="rotate(-18 1070 66)"/><rect x="1077" y="30" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="160" cy="92" rx="8.4" ry="6" transform="rotate(-18 160 92)"/><rect x="167" y="56" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="250" cy="76" rx="8.4" ry="6" transform="rotate(-18 250 76)"/><rect x="257" y="40" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="340" cy="68" rx="8.4" ry="6" transform="rotate(-18 340 68)"/><rect x="347" y="32" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="430" cy="52" rx="8.4" ry="6" transform="rotate(-18 430 52)"/><rect x="437" y="16" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="540" cy="44" rx="8.4" ry="6" transform="rotate(-18 540 44)"/><rect x="547" y="8" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="650" cy="52" rx="8.4" ry="6" transform="rotate(-18 650 52)"/><rect x="657" y="16" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="760" cy="68" rx="8.4" ry="6" transform="rotate(-18 760 68)"/><rect x="767" y="32" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="870" cy="60" rx="8.4" ry="6" transform="rotate(-18 870 60)"/><rect x="877" y="24" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="980" cy="76" rx="8.4" ry="6" transform="rotate(-18 980 76)"/><rect x="987" y="40" width="2.4" height="36"/></g>
+        <g data-n><ellipse cx="1070" cy="60" rx="8.4" ry="6" transform="rotate(-18 1070 60)"/><rect x="1077" y="24" width="2.4" height="36"/></g>
       </g>
-      <line class="ph" id="playhead" x1="120" y1="20" x2="120" y2="112"/>
+      <line class="ph" id="playhead" x1="120" y1="14" x2="120" y2="106"/>
     </svg>
   </div></div>
 </header>
 
-<!-- REPERTOIRE (features as movements) -->
-<section id="repertoire"><div class="wrap">
-  <div class="sec-head rv"><span class="label">Özellikler</span><h2 class="serif">Tek uygulama, <em>koca bir konservatuvar.</em></h2><p>Her gün birkaç dakika. Sıfırdan ustalığa, adım adım.</p></div>
+<!-- FEATURES -->
+<section id="features"><div class="wrap">
+  <div class="sec-head rv"><span class="label" data-en="Features">Özellikler</span><h2 class="serif" data-en="One app, <em>a whole conservatory.</em>">Tek uygulama, <em>koca bir konservatuvar.</em></h2><p data-en="A few minutes a day. From zero to mastery, step by step.">Her gün birkaç dakika. Sıfırdan ustalığa, adım adım.</p></div>
   <div class="moves">
-    <div class="move rv"><div class="rn">I</div><div><div class="mt"><h3>Nota Okuma</h3></div><p>Sol, Fa ve Do anahtarlarında refleksle, akıcı deşifre.</p></div><div class="ic"><svg><use href="#i-note"/></svg></div></div>
-    <div class="move rv"><div class="rn">II</div><div><div class="mt"><h3>Kulak Eğitimi</h3></div><p>Aralıklar ve akorlar — duyduğunu tanı, yalnızca gördüğünü değil.</p></div><div class="ic"><svg><use href="#i-ear"/></svg></div></div>
-    <div class="move rv"><div class="rn">III</div><div><div class="mt"><h3>Akor Laboratuvarı</h3></div><p>Akorlar, gamlar, modlar, beşli çemberi ve progresyonlar elinin altında.</p></div><div class="ic"><svg><use href="#i-piano"/></svg></div></div>
-    <div class="move rv"><div class="rn">IV</div><div><div class="mt"><h3>Pro Araçlar</h3></div><p>Kararlı akort aleti, metronom ve vokal eğitici — hepsi içinde.</p></div><div class="ic"><svg><use href="#i-tuner"/></svg></div></div>
-    <div class="move rv"><div class="rn">V</div><div><div class="mt"><h3>Oyun Gibi</h3></div><p>Seriler, görevler, haftalık ligler ve sertifikalar — devam etmek istersin.</p></div><div class="ic"><svg><use href="#i-flame"/></svg></div></div>
-    <div class="move rv"><div class="rn">VI</div><div><div class="mt"><h3>30 Günde Oku</h3></div><p>Net hedefli program: adım adım, 30 günde akıcı nota okumaya ulaş.</p></div><div class="ic"><svg><use href="#i-cal"/></svg></div></div>
-  </div>
-</div></section>
-
-<!-- APP EXCERPT -->
-<section id="excerpt"><div class="wrap excerpt">
-  <div class="frame rv">
-    <div class="scr">
-      <div class="top">🎼 Çalışma · Sol Anahtarı</div>
-      <div class="bar"><span class="chip h">♥ 5</span><span class="chip s">🔥 12</span><span class="chip x">✦ 1.240</span></div>
-      <div class="q"><div class="ql">Bu nota hangisi?</div>
-        <svg viewBox="0 0 248 96" style="width:100%;display:block">
-          <g stroke="rgba(255,255,255,.26)" stroke-width="1.4"><line x1="12" y1="24" x2="238" y2="24"/><line x1="12" y1="38" x2="238" y2="38"/><line x1="12" y1="52" x2="238" y2="52"/><line x1="12" y1="66" x2="238" y2="66"/><line x1="12" y1="80" x2="238" y2="80"/></g>
-          <use href="#clef" transform="translate(8,12) scale(2.9)" style="color:#d8b25a"/>
-          <g fill="#d8b25a"><g><ellipse cx="120" cy="66" rx="7" ry="5" transform="rotate(-20 120 66)"/><rect x="125.4" y="40" width="2.2" height="26"/></g><g><ellipse cx="200" cy="52" rx="7" ry="5" transform="rotate(-20 200 52)"/><rect x="205.4" y="26" width="2.2" height="26"/></g></g>
-          <g><ellipse cx="160" cy="38" rx="7.6" ry="5.4" transform="rotate(-20 160 38)" fill="#fff"/><rect x="165.6" y="12" width="2.4" height="26" fill="#fff"/><circle cx="160" cy="38" r="14" fill="none" stroke="#fff" stroke-width="1.6"><animate attributeName="r" values="12;17;12" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;.2;.7" dur="1.6s" repeatCount="indefinite"/></circle></g>
-        </svg>
-      </div>
-      <div class="ans" style="margin-bottom:12px"><div class="a">Do</div><div class="a ok">Re ✓</div><div class="a">Mi</div><div class="a">Fa</div></div>
-      <div class="prog"><i></i></div>
-    </div>
-  </div>
-  <div class="excerpt-txt rv d1">
-    <span class="label">Uygulamadan bir kesit</span>
-    <h2 class="serif" style="margin-top:12px">Gör, <em>duy,</em> dokun — öğren.</h2>
-    <p>Her soru kısa bir performans gibi: notayı gör, sesini duy, doğru cevabı seç. Doğru çaldıkça seri büyür, seviye atlarsın.</p>
-    <p>Konservatuvar müfredatı, oyunun ritmiyle. Birkaç dakikalık seanslar kalıcı bir alışkanlığa dönüşür.</p>
+    <div class="move rv"><div class="rn">I</div><div><h3 data-en="Sight-Reading">Nota Okuma</h3><p data-en="Fluent reading in treble, bass and C clefs — on reflex.">Sol, Fa ve Do anahtarlarında refleksle, akıcı deşifre.</p></div><div class="ic"><svg><use href="#i-note"/></svg></div></div>
+    <div class="move rv"><div class="rn">II</div><div><h3 data-en="Ear Training">Kulak Eğitimi</h3><p data-en="Intervals and chords — recognize what you hear, not just what you see.">Aralıklar ve akorlar — duyduğunu tanı, yalnızca gördüğünü değil.</p></div><div class="ic"><svg><use href="#i-ear"/></svg></div></div>
+    <div class="move rv"><div class="rn">III</div><div><h3 data-en="Chord Lab">Akor Laboratuvarı</h3><p data-en="Chords, scales, modes, the circle of fifths and progressions at your fingertips.">Akorlar, gamlar, modlar, beşli çemberi ve progresyonlar elinin altında.</p></div><div class="ic"><svg><use href="#i-piano"/></svg></div></div>
+    <div class="move rv"><div class="rn">IV</div><div><h3 data-en="Pro Tools">Pro Araçlar</h3><p data-en="A rock-steady tuner, metronome and vocal trainer — all built in.">Kararlı akort aleti, metronom ve vokal eğitici — hepsi içinde.</p></div><div class="ic"><svg><use href="#i-tuner"/></svg></div></div>
+    <div class="move rv"><div class="rn">V</div><div><h3 data-en="Like a Game">Oyun Gibi</h3><p data-en="Streaks, quests, weekly leagues and certificates — you'll want to keep going.">Seriler, görevler, haftalık ligler ve sertifikalar — devam etmek istersin.</p></div><div class="ic"><svg><use href="#i-flame"/></svg></div></div>
+    <div class="move rv"><div class="rn">VI</div><div><h3 data-en="Read in 30 Days">30 Günde Oku</h3><p data-en="A clear-goal program: step by step, read music fluently in 30 days.">Net hedefli program: adım adım, 30 günde akıcı nota okumaya ulaş.</p></div><div class="ic"><svg><use href="#i-cal"/></svg></div></div>
   </div>
 </div></section>
 
@@ -280,43 +281,62 @@
     <div class="hub"><svg><use href="#clef"/></svg></div>
   </div>
   <div class="show-txt rv d1">
-    <span class="label">Teori, görünür hale geliyor</span>
-    <h2 class="serif" style="font-size:clamp(30px,4vw,48px);margin:12px 0 16px;font-weight:600;line-height:1.04">Müziğin haritasını <em>elinle keşfet.</em></h2>
-    <p style="color:var(--ink2);font-size:17px;margin-bottom:14px">Beşli çemberi, akorlar, gamlar ve modlar — kuru ezber değil, dokunarak, duyarak. Tonaliteler arasındaki ilişkiyi gör; her şey yerine otursun.</p>
-    <p style="color:var(--ink2);font-size:17px">Akor Laboratuvarı'nda piyano ve gitar üzerinde dene, çal, duy.</p>
-    <div class="tagrow"><span class="tag">Beşli Çemberi</span><span class="tag">Akorlar</span><span class="tag">Modlar</span><span class="tag">Progresyon</span><span class="tag">İnversiyon</span></div>
+    <span class="label" data-en="Theory, made visible">Teori, görünür hale geliyor</span>
+    <h2 class="serif" data-en="Explore the map of music <em>with your hands.</em>">Müziğin haritasını <em>elinle keşfet.</em></h2>
+    <p data-en="The circle of fifths, chords, scales and modes — not rote memorization, but by touch and by ear. See how keys relate; let it all click into place.">Beşli çemberi, akorlar, gamlar ve modlar — kuru ezber değil, dokunarak, duyarak. Tonaliteler arasındaki ilişkiyi gör; her şey yerine otursun.</p>
+    <p data-en="Try it on piano and guitar in the Chord Lab — play it, hear it.">Akor Laboratuvarı'nda piyano ve gitar üzerinde dene, çal, duy.</p>
+    <div class="tagrow"><span class="tag" data-en="Circle of Fifths">Beşli Çemberi</span><span class="tag" data-en="Chords">Akorlar</span><span class="tag" data-en="Modes">Modlar</span><span class="tag" data-en="Progressions">Progresyon</span><span class="tag" data-en="Inversions">İnversiyon</span></div>
   </div>
 </div></section>
 
-<!-- TEACHERS — pull quote -->
+<!-- TEACHERS -->
 <section><div class="wrap quote rv">
   <div class="qm">”</div>
-  <blockquote class="serif">Konservatuvar pedagojisiyle kuruldu, gerçek öğretmen ve öğrencilerle <em>test edildi.</em> Sınıfını yönet, gelişimi takip et, ödev ver.</blockquote>
-  <div class="by">— Öğretmenler için tasarlandı</div>
-  <a href="https://apps.apple.com/app/id6773070466" class="pillbtn gold mag" style="margin-top:26px">Ücretsiz Dene</a>
-</div></div></section>
+  <blockquote class="serif" data-en="Built on conservatory pedagogy, <em>tested</em> with real teachers and students. Manage your class, track progress, assign homework.">Konservatuvar pedagojisiyle kuruldu, gerçek öğretmen ve öğrencilerle <em>test edildi.</em> Sınıfını yönet, gelişimi takip et, ödev ver.</blockquote>
+  <div class="by" data-en="— Designed for teachers">— Öğretmenler için tasarlandı</div>
+  <a href="https://apps.apple.com/app/id6773070466" class="pillbtn gold mag" style="margin-top:26px" data-en="Try it Free">Ücretsiz Dene</a>
+</div></section>
 
 <!-- CODA -->
 <section><div class="wrap coda rv">
-  <h2 class="serif">Bugün <em>ilk notanı</em> oku.</h2>
-  <p>Bir dakikada başla — alışkanlığa dönüşsün, kalıcı olsun.</p>
-  <a href="https://apps.apple.com/app/id6773070466" class="appstore mag" style="margin:0 auto"><svg><use href="#apple"/></svg><span><span class="a1">App Store'dan</span><br><span class="a2">İNDİR</span></span></a>
+  <h2 class="serif" data-en="Read your <em>first note</em> today.">Bugün <em>ilk notanı</em> oku.</h2>
+  <p data-en="Start in a minute — make it a habit that sticks.">Bir dakikada başla — alışkanlığa dönüşsün, kalıcı olsun.</p>
+  <a href="https://apps.apple.com/app/id6773070466" class="appstore mag" style="margin:0 auto"><svg><use href="#apple"/></svg><span><span class="a1" data-en="Download on the">App Store'dan</span><br><span class="a2" data-en="APP STORE">İNDİR</span></span></a>
 </div></section>
 
 <footer><div class="wrap foot">
   <div class="logo"><svg class="clef" style="width:22px;height:25px"><use href="#clef"/></svg><b class="serif" style="font-size:22px;font-weight:600">Klef</b></div>
-  <div class="foot-links"><a href="https://klefapp.github.io/klef-legal/">Gizlilik</a><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Şartlar</a><a href="mailto:support@klefapp.com">İletişim</a></div>
+  <div class="foot-links">
+    <a href="https://klefapp.github.io/klef-legal/" data-en="Privacy">Gizlilik</a>
+    <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-en="Terms">Şartlar</a>
+    <a href="mailto:support@klefapp.com" class="mail">support@klefapp.com</a>
+  </div>
   <div>© 2026 Ali Dağdöğen</div>
 </div></footer>
 
 <script>
   const RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  // reveal
+
+  // ── i18n (TR / EN) ──
+  const i18nEls = [...document.querySelectorAll('[data-en]')];
+  i18nEls.forEach(e=>e.dataset.tr = e.innerHTML);  // capture Turkish originals
+  function setLang(l){
+    document.documentElement.lang = l;
+    i18nEls.forEach(e=>{ e.innerHTML = (l==='en') ? e.dataset.en : e.dataset.tr; });
+    document.getElementById('langLabel').textContent = (l==='en') ? 'TR' : 'EN';
+    try{ localStorage.setItem('klef_lang', l); }catch(e){}
+  }
+  let saved = null; try{ saved = localStorage.getItem('klef_lang'); }catch(e){}
+  const lang = saved || ((navigator.language||'').toLowerCase().startsWith('tr') ? 'tr' : 'en');
+  setLang(lang);
+  document.getElementById('langBtn').addEventListener('click', ()=> setLang(document.documentElement.lang==='en' ? 'tr' : 'en'));
+
+  // reveal on scroll
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
   document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 
   if(!RM){
-    // playhead sweep across the score strip + light up notes as it passes
+    // playhead sweep across the score strip + light up notes
     const ph=document.getElementById('playhead');
     const notes=[...document.querySelectorAll('#notes [data-n]')];
     const xs=notes.map(n=>+n.querySelector('ellipse').getAttribute('cx'));
@@ -326,7 +346,7 @@
       ph.setAttribute('x1',x);ph.setAttribute('x2',x);
       notes.forEach((n,i)=>{const hit=Math.abs(xs[i]-x)<14;
         n.querySelector('ellipse').setAttribute('fill',hit?'#d8b25a':'var(--ink)');
-        n.style.transform=hit?'translateY(-2px)':'';n.style.transformBox='fill-box';n.style.transition='transform .15s';});
+        n.style.transformBox='fill-box';n.style.transition='transform .15s';n.style.transform=hit?'translateY(-2px)':'';});
       requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
