@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klef — Müzik ve Nota Okumayı Öğren</title>
+<meta name="description" content="Klef, nota okumayı ve müzik kulağını günde birkaç dakikada öğreten uygulama. Cebinde küçük bir konservatuvar.">
+<meta property="og:title" content="Klef — Müzik ve Nota Okumayı Öğren">
+<meta property="og:description" content="Nota oku, kulağını eğit, ritmini bul. Hepsi tek uygulamada, oyun gibi.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0c1030; --navy2:#141a44; --navy3:#0a0d24;
+    --gold:#e8c46a; --gold2:#c79b3f;
+    --brand:#7b6cf6; --brand2:#9d7bff;
+    --ink:#eef1ff; --ink2:#aab3d8; --ink3:#7d86b0;
+    --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--navy); color:var(--ink); line-height:1.55; overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* Glow background */
+  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:
+      radial-gradient(900px 600px at 15% -10%, rgba(123,108,246,.30), transparent 60%),
+      radial-gradient(800px 600px at 95% 10%, rgba(232,196,106,.16), transparent 55%),
+      linear-gradient(180deg,var(--navy3),var(--navy) 40%,var(--navy3));}
+
+  /* Nav */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+      background:rgba(10,13,36,.55);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px;letter-spacing:.5px}
+  .brand .clef{width:26px;height:26px;color:var(--gold)}
+  .brand span{background:linear-gradient(120deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;font-family:'Fraunces',serif;font-style:italic;font-size:26px}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:15px;
+       padding:12px 20px;border-radius:14px;transition:.2s;white-space:nowrap}
+  .btn-primary{background:linear-gradient(120deg,var(--brand),var(--brand2));color:#fff;
+       box-shadow:0 8px 26px rgba(123,108,246,.45)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(123,108,246,.6)}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* Hero */
+  header{padding:84px 0 40px;text-align:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:2px;
+       color:var(--gold);text-transform:uppercase;padding:8px 16px;border:1px solid rgba(232,196,106,.3);
+       border-radius:999px;background:rgba(232,196,106,.07);margin-bottom:26px}
+  h1{font-family:'Fraunces',serif;font-style:italic;font-weight:800;font-size:clamp(42px,7vw,76px);
+     line-height:1.02;letter-spacing:-1px;margin-bottom:20px}
+  h1 .g{background:linear-gradient(120deg,#fff 20%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{font-size:clamp(17px,2.4vw,21px);color:var(--ink2);max-width:620px;margin:0 auto 34px}
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center}
+  .appstore{display:inline-flex;align-items:center;gap:12px;background:#000;border:1px solid var(--line);
+       padding:11px 22px;border-radius:15px;transition:.2s}
+  .appstore:hover{transform:translateY(-2px);border-color:var(--gold)}
+  .appstore svg{width:26px;height:26px;color:#fff}
+  .appstore .t1{font-size:11px;color:#bbb;line-height:1}
+  .appstore .t2{font-size:19px;font-weight:600;color:#fff;line-height:1.2}
+  .langs{margin-top:30px;font-size:14px;color:var(--ink3);display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .langs b{color:var(--ink2)}
+
+  /* Phone mock */
+  .mock{margin:54px auto 0;width:270px;height:300px;position:relative}
+  .phone{position:absolute;inset:0;border-radius:42px;border:2px solid rgba(255,255,255,.14);
+     background:linear-gradient(160deg,#161c46,#0c1030);box-shadow:0 40px 90px rgba(0,0,0,.5),0 0 0 8px rgba(255,255,255,.02);
+     overflow:hidden;padding:22px}
+  .staff{position:relative;height:120px;margin-top:34px}
+  .staff .ln{position:absolute;left:0;right:0;height:1.5px;background:rgba(255,255,255,.18)}
+  .note{position:absolute;width:20px;height:14px;border-radius:50%;background:var(--gold);
+     box-shadow:0 0 18px rgba(232,196,106,.6)}
+  .clefbig{position:absolute;left:8px;top:14px;width:34px;color:var(--gold);opacity:.9}
+
+  /* Sections */
+  section{padding:64px 0}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 46px}
+  .sec-head .k{color:var(--gold);font-weight:700;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+  .sec-head h2{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(30px,4.5vw,44px);margin:10px 0 12px}
+  .sec-head p{color:var(--ink2);font-size:17px}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;transition:.25s}
+  .feat:hover{transform:translateY(-4px);border-color:rgba(232,196,106,.4);background:rgba(255,255,255,.06)}
+  .feat .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px;
+     background:linear-gradient(135deg,rgba(123,108,246,.3),rgba(232,196,106,.18));font-size:24px}
+  .feat h3{font-size:19px;margin-bottom:7px}
+  .feat p{color:var(--ink2);font-size:14.5px}
+
+  /* Teacher band */
+  .band{background:linear-gradient(120deg,rgba(123,108,246,.14),rgba(232,196,106,.10));
+     border:1px solid var(--line);border-radius:26px;padding:46px;text-align:center}
+  .band h2{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(28px,4vw,40px);margin-bottom:14px}
+  .band p{color:var(--ink2);max-width:560px;margin:0 auto 26px;font-size:17px}
+
+  /* Final CTA */
+  .final{text-align:center}
+  .final h2{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(32px,5vw,52px);margin-bottom:16px}
+  .final p{color:var(--ink2);font-size:18px;margin-bottom:30px}
+
+  /* Footer */
+  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--ink3);font-size:14px}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+  .foot a{transition:.2s}.foot a:hover{color:var(--gold)}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+
+  @media(max-width:760px){
+    .grid{grid-template-columns:1fr}
+    .nav .btn-ghost{display:none}
+    header{padding:54px 0 24px}
+    section{padding:48px 0}
+    .band{padding:34px 22px}
+  }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<!-- NAV -->
+<nav><div class="wrap nav">
+  <div class="brand">
+    <svg class="clef" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2c-1.5 0-2.7 1.3-2.7 3 0 1.2.5 2.1 1.2 3.2-2 1.8-3.5 3.6-3.5 6.1 0 2.7 2 4.7 4.6 4.7.5 0 1-.1 1.4-.2l.2 2.1c.1 1.4-.7 2.3-1.8 2.3-.9 0-1.6-.5-1.7-1.2.6-.1 1-.6 1-1.2 0-.7-.6-1.3-1.3-1.3-.8 0-1.4.7-1.4 1.6 0 1.6 1.5 2.8 3.4 2.8 2 0 3.5-1.5 3.3-3.6l-.2-2.4c1.4-.6 2.3-1.9 2.3-3.5 0-1.9-1.4-3.3-3.2-3.3-.2 0-.5 0-.7.1l-.3-2.8c.9-1.1 1.6-2.2 1.6-3.6 0-1.8-1.2-3.1-2.5-3.1zm0 1.4c.5 0 .9.7.9 1.7 0 .9-.4 1.6-1 2.4-.5-.8-.8-1.5-.8-2.3 0-1 .4-1.8.9-1.8zm.6 8.3c1 0 1.8.9 1.8 2.1 0 .9-.5 1.7-1.3 2.1l-.5-4.1c0-.1 0-.1 0-.1zm-1.5.3l.5 4.2c-.2.1-.5.1-.7.1-1.7 0-3-1.3-3-3.1 0-1.6 1-2.9 2.5-4.3l.7 3.1z"/></svg>
+    <span>Klef</span>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center">
+    <a href="#features" class="btn btn-ghost">Özellikler</a>
+    <a href="https://apps.apple.com/app/id6773070466" class="btn btn-primary">İndir</a>
+  </div>
+</div></nav>
+
+<!-- HERO -->
+<header><div class="wrap">
+  <div class="eyebrow">🎼 App Store'da</div>
+  <h1>Nota okumayı<br><span class="g">bir dakikada</span> başlat.</h1>
+  <p class="lead">Klef, nota okumayı ve müzik kulağını günde birkaç dakikada geliştiren uygulama. Sıfırdan başla ya da kendini geliştir — cebinde küçük bir konservatuvar.</p>
+  <div class="cta-row">
+    <a href="https://apps.apple.com/app/id6773070466" class="appstore">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.71-3.19-1.73-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.1 8.79.73 1.06 1.6 2.25 2.74 2.21 1.1-.05 1.52-.71 2.85-.71 1.33 0 1.71.71 2.88.69 1.19-.02 1.94-1.08 2.67-2.15.84-1.23 1.19-2.42 1.21-2.48-.03-.01-2.32-.89-2.34-3.53zM14.88 5.6c.61-.74 1.02-1.77.91-2.8-.88.04-1.94.59-2.57 1.32-.56.65-1.06 1.7-.93 2.7.98.08 1.98-.5 2.59-1.22z"/></svg>
+      <div><div class="t1">App Store'dan</div><div class="t2">İNDİR</div></div>
+    </a>
+    <a href="#features" class="btn btn-ghost">Neler var? →</a>
+  </div>
+  <div class="langs">🌍 <b>5 dilde:</b> Türkçe · English · Español · Deutsch · Français</div>
+
+  <!-- phone mock -->
+  <div class="mock"><div class="phone">
+    <svg class="clefbig" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2c-1.5 0-2.7 1.3-2.7 3 0 1.2.5 2.1 1.2 3.2-2 1.8-3.5 3.6-3.5 6.1 0 2.7 2 4.7 4.6 4.7.5 0 1-.1 1.4-.2l.2 2.1c.1 1.4-.7 2.3-1.8 2.3-.9 0-1.6-.5-1.7-1.2.6-.1 1-.6 1-1.2 0-.7-.6-1.3-1.3-1.3-.8 0-1.4.7-1.4 1.6 0 1.6 1.5 2.8 3.4 2.8 2 0 3.5-1.5 3.3-3.6l-.2-2.4c1.4-.6 2.3-1.9 2.3-3.5 0-1.9-1.4-3.3-3.2-3.3-.2 0-.5 0-.7.1l-.3-2.8c.9-1.1 1.6-2.2 1.6-3.6 0-1.8-1.2-3.1-2.5-3.1z"/></svg>
+    <div class="staff">
+      <div class="ln" style="top:0"></div><div class="ln" style="top:25px"></div>
+      <div class="ln" style="top:50px"></div><div class="ln" style="top:75px"></div>
+      <div class="ln" style="top:100px"></div>
+      <div class="note" style="left:90px;top:43px"></div>
+      <div class="note" style="left:140px;top:18px"></div>
+      <div class="note" style="left:190px;top:68px"></div>
+    </div>
+  </div></div>
+</div></header>
+
+<!-- FEATURES -->
+<section id="features"><div class="wrap">
+  <div class="sec-head">
+    <div class="k">Neler öğrenirsin</div>
+    <h2>Tek uygulama, koca bir konservatuvar</h2>
+    <p>Oyunlaştırılmış, kısa ve etkili. Her gün birkaç dakika yeter.</p>
+  </div>
+  <div class="grid">
+    <div class="feat"><div class="ic">🎵</div><h3>Nota Okuma</h3><p>Sol, Fa ve Do anahtarlarında refleksle, akıcı deşifre.</p></div>
+    <div class="feat"><div class="ic">👂</div><h3>Kulak Eğitimi</h3><p>Aralıklar ve akorlar — duyduğunu tanı, sadece gördüğünü değil.</p></div>
+    <div class="feat"><div class="ic">🎹</div><h3>Akor Laboratuvarı</h3><p>Akorlar, gamlar, modlar, beşli çemberi, progresyonlar.</p></div>
+    <div class="feat"><div class="ic">🎚️</div><h3>Pro Araçlar</h3><p>Kararlı akort aleti, metronom ve vokal eğitici — hepsi içinde.</p></div>
+    <div class="feat"><div class="ic">🔥</div><h3>Oyun Gibi</h3><p>Seriler, görevler, ligler ve sertifikalar — devam etmek istersin.</p></div>
+    <div class="feat"><div class="ic">📅</div><h3>30 Günde Oku</h3><p>Net hedefli program: adım adım, 30 günde akıcı nota oku.</p></div>
+  </div>
+</div></section>
+
+<!-- TEACHERS -->
+<section><div class="wrap">
+  <div class="band">
+    <h2>Öğretmenler için</h2>
+    <p>Konservatuvar pedagojisiyle tasarlandı, gerçek öğretmen ve öğrencilerle test edildi. Sınıfını yönet, öğrencilerinin gelişimini takip et, ödev ver.</p>
+    <a href="https://apps.apple.com/app/id6773070466" class="btn btn-primary">Ücretsiz Dene</a>
+  </div>
+</div></section>
+
+<!-- FINAL CTA -->
+<section><div class="wrap final">
+  <h2>Bir dakikada ilk notanı oku.</h2>
+  <p>Bugün başla — alışkanlığa dönüşsün, kalıcı olsun.</p>
+  <a href="https://apps.apple.com/app/id6773070466" class="appstore" style="margin:0 auto">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.71-3.19-1.73-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.1 8.79.73 1.06 1.6 2.25 2.74 2.21 1.1-.05 1.52-.71 2.85-.71 1.33 0 1.71.71 2.88.69 1.19-.02 1.94-1.08 2.67-2.15.84-1.23 1.19-2.42 1.21-2.48-.03-.01-2.32-.89-2.34-3.53zM14.88 5.6c.61-.74 1.02-1.77.91-2.8-.88.04-1.94.59-2.57 1.32-.56.65-1.06 1.7-.93 2.7.98.08 1.98-.5 2.59-1.22z"/></svg>
+    <div><div class="t1">App Store'dan</div><div class="t2">İNDİR</div></div>
+  </a>
+</div></section>
+
+<!-- FOOTER -->
+<footer><div class="wrap foot">
+  <div class="brand" style="font-size:18px"><span>Klef</span></div>
+  <div class="foot-links">
+    <a href="https://klefapp.github.io/klef-legal/">Gizlilik Politikası</a>
+    <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Kullanım Şartları</a>
+    <a href="mailto:support@klefapp.com">İletişim</a>
+  </div>
+  <div>© 2026 Ali Dağdöğen</div>
+</div></footer>
+
+</body>
+</html>
