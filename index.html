@@ -4,308 +4,316 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Klef — Müziği Oyun Gibi Öğren</title>
-<meta name="description" content="Klef: nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada öğreten uygulama. Konservatuvar pedagojisiyle, oyun gibi.">
-<meta property="og:title" content="Klef — Read music in a minute">
-<meta property="og:description" content="Read notes, train your ear, find your rhythm. A little conservatory in your pocket.">
-<meta property="og:type" content="website">
-<meta name="theme-color" content="#f4efe3">
+<meta name="description" content="Klef: nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada öğreten uygulama. Hemen tarayıcıda dene.">
+<meta property="og:title" content="Klef — Play your way to reading music">
+<meta property="og:description" content="Read notes, train your ear, find your rhythm. Try it right here, then get the app.">
+<meta name="theme-color" content="#0e0a22">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#f4efe3;--paper2:#ece3d0;--card:#faf6ec;
-    --ink:#13173a;--ink2:#4a4f72;--ink3:#8c8aa0;
-    --gold:#b0863a;--goldb:#d8b25a;--goldd:#8c6a2c;
-    --line:rgba(19,23,58,.13);--rule:rgba(176,134,58,.45)}
+    --bg:#0e0a22;--card:#1b1342;--card2:#241852;
+    --ink:#f6f4ff;--ink2:#bcb6e8;--ink3:#827cb2;
+    --violet:#a855f7;--violet2:#7c4dff;--mint:#34e6a8;--coral:#fb7185;--gold:#fbbf24;--cyan:#22d3ee;
+    --line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16)}
   *{box-sizing:border-box;margin:0;padding:0}
-  ::selection{background:rgba(176,134,58,.25);color:var(--ink)}
-  html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;overflow-x:hidden}
+  ::selection{background:rgba(168,85,247,.4);color:#fff}
+  html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
   img,svg{max-width:100%}
-  h1,h2,h3,p,blockquote{overflow-wrap:break-word}
-  .serif{font-family:'Fraunces',Georgia,serif}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(22px,5vw,34px)}
-  .label{font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+  h1,h2,h3,p{overflow-wrap:break-word}
+  .gro{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,32px);position:relative}
+  .label{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--violet)}
 
-  .paper-tex{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
-  .vignette{position:fixed;inset:0;z-index:-1;pointer-events:none;box-shadow:inset 0 0 240px rgba(120,95,50,.14)}
+  /* animated mesh bg */
+  .bg{position:fixed;inset:0;z-index:-3;background:
+      radial-gradient(680px 540px at 6% 0,rgba(124,77,255,.42),transparent 56%),
+      radial-gradient(620px 520px at 100% 8%,rgba(34,211,238,.2),transparent 54%),
+      radial-gradient(720px 620px at 70% 108%,rgba(251,113,133,.18),transparent 56%),var(--bg);
+      background-size:160% 160%;animation:mesh 20s ease-in-out infinite}
+  @keyframes mesh{0%,100%{background-position:0 0}50%{background-position:40% 30%}}
+  .blob{position:fixed;border-radius:50%;filter:blur(60px);z-index:-2;opacity:.4;pointer-events:none;animation:drift 18s ease-in-out infinite}
+  .blob.b1{width:300px;height:300px;background:var(--violet);top:-60px;left:-40px}
+  .blob.b2{width:260px;height:260px;background:var(--cyan);top:40%;right:-60px;animation-delay:-6s}
+  .blob.b3{width:240px;height:240px;background:var(--coral);bottom:-40px;left:40%;animation-delay:-11s}
+  @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.12)}}
+  /* floating decorations */
+  .deco{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+  .deco span{position:absolute;animation:floaty linear infinite;will-change:transform}
+  @keyframes floaty{0%{transform:translateY(30px) rotate(0);opacity:0}12%{opacity:.8}88%{opacity:.5}100%{transform:translateY(-140px) rotate(28deg);opacity:0}}
 
-  .rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .rv{opacity:0;transform:translateY(26px) scale(.98);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
   .rv.in{opacity:1;transform:none}
-  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
 
-  nav{position:sticky;top:0;z-index:60;background:rgba(244,239,227,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+  nav{position:sticky;top:0;z-index:60;background:rgba(14,10,34,.6);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
   .logo{display:flex;align-items:center;gap:10px}
-  .logo .clef{width:26px;height:30px;color:var(--ink)}
-  .logo b{font-size:27px;font-weight:600;letter-spacing:.5px}
-  .nav-r{display:flex;align-items:center;gap:26px}
-  .nav-r a.lk{font-weight:600;color:var(--ink2);font-size:14.5px;transition:.2s;position:relative}
-  .nav-r a.lk:hover{color:var(--ink)}
-  .nav-r a.lk::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1.5px;background:var(--gold);transition:width .25s}.nav-r a.lk:hover::after{width:100%}
-  .lang{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;color:var(--ink2);border:1px solid var(--line);padding:7px 13px;border-radius:50px;cursor:pointer;transition:.2s;background:none}
-  .lang:hover{border-color:var(--gold);color:var(--gold)}
-  .pillbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;padding:11px 22px;border-radius:50px;background:var(--ink);color:var(--paper);transition:transform .22s,box-shadow .3s;will-change:transform}
-  .pillbtn:hover{box-shadow:0 12px 26px rgba(19,23,58,.25)}
-  .pillbtn.gold{background:linear-gradient(120deg,var(--goldb),var(--gold));color:#241a07}
+  .logo .clef{width:26px;height:30px;color:var(--gold);filter:drop-shadow(0 0 10px rgba(251,191,36,.6))}
+  .logo b{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700}
+  .nav-r{display:flex;align-items:center;gap:22px}
+  .nav-r a.lk{font-weight:600;color:var(--ink2);font-size:14.5px;transition:.2s}.nav-r a.lk:hover{color:#fff}
+  .lang{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;color:var(--ink2);border:1px solid var(--line2);padding:7px 13px;border-radius:50px;cursor:pointer;transition:.2s;background:none}
+  .lang:hover{border-color:var(--violet);color:#fff}
+  .cta-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14.5px;padding:11px 22px;border-radius:14px;background:linear-gradient(120deg,var(--violet),var(--violet2));color:#fff;box-shadow:0 8px 26px rgba(124,77,255,.4);transition:transform .2s,box-shadow .3s;cursor:pointer;border:none}
+  .cta-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 14px 36px rgba(124,77,255,.6)}
 
-  /* ── HERO (2-col) ── */
-  header{position:relative;padding:18px 0 0;overflow:hidden}
-  .bigclef{position:absolute;right:-70px;top:-20px;width:min(440px,40vw);color:var(--gold);opacity:.06;z-index:0;pointer-events:none}
-  .hero{position:relative;z-index:2;display:grid;grid-template-columns:1.06fr .82fr;gap:50px;align-items:center;padding:28px 0 26px}
-  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(44px,5.6vw,82px);line-height:.98;letter-spacing:-.02em;max-width:13ch;margin-bottom:0}
-  h1 em{font-style:italic;font-weight:500;color:var(--gold);position:relative}
-  h1 .w{display:inline-block;opacity:0;transform:translateY(40px);animation:win .9s cubic-bezier(.2,.8,.2,1) forwards}
-  h1 .w:nth-child(2){animation-delay:.1s}h1 .w:nth-child(3){animation-delay:.2s}h1 .w:nth-child(4){animation-delay:.3s}
-  @keyframes win{to{opacity:1;transform:none}}
-  .underw{display:inline-block}.underw svg{display:block;width:100%;height:.34em;margin-top:-.06em;overflow:visible}
-  .underw path{stroke:var(--goldb);stroke-width:8;fill:none;stroke-linecap:round;stroke-dasharray:360;stroke-dashoffset:360;animation:draw 1.1s cubic-bezier(.3,.7,.3,1) .9s forwards}
-  @keyframes draw{to{stroke-dashoffset:0}}
-  .lead{font-size:clamp(16px,1.6vw,19px);color:var(--ink2);max-width:500px;margin:28px 0 30px}
-  .lead .drop{font-family:'Fraunces',serif;font-weight:600;font-size:1.05em;color:var(--ink)}
-  .cta{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-  .appstore{display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--paper);padding:13px 24px;border-radius:14px;transition:transform .22s,box-shadow .3s;will-change:transform}
-  .appstore:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(19,23,58,.28)}
-  .appstore svg{width:26px;height:26px;color:var(--paper)}
-  .appstore .a1{font-size:11px;opacity:.7;line-height:1.1}.appstore .a2{font-size:18px;font-weight:600;line-height:1.2}
-  .ghost{display:inline-flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);transition:.2s}
-  .ghost .pl{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;transition:.25s}.ghost:hover .pl{background:var(--ink);color:var(--paper)}
-  .ghost .pl svg{width:11px;height:11px;margin-left:2px}
-  .trust{margin-top:30px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:var(--ink3);font-size:13.5px}
-  .trust .stars{color:var(--gold);letter-spacing:2px;font-size:15px}
-  .flags{font-size:15px;letter-spacing:1px;filter:grayscale(.15)}
+  /* HERO */
+  header{padding:30px 0 8px;position:relative}
+  .hero{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center;position:relative;z-index:2}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:var(--mint);border:1px solid rgba(52,230,168,.35);background:rgba(52,230,168,.08);padding:7px 15px;border-radius:50px;margin-bottom:22px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint);animation:blink 1.4s ease-in-out infinite}
+  @keyframes blink{50%{opacity:.3}}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(44px,6.4vw,82px);line-height:.98;letter-spacing:-.035em;margin-bottom:20px}
+  h1 .hl{background:linear-gradient(110deg,var(--violet),var(--coral) 50%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:hue 5s linear infinite}
+  @keyframes hue{to{background-position:200% center}}
+  .lead{font-size:clamp(16px,1.6vw,19px);color:var(--ink2);max-width:470px;margin-bottom:28px}
+  .herocta{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .appstore{display:inline-flex;align-items:center;gap:12px;background:#000;border:1px solid var(--line2);color:#fff;padding:13px 22px;border-radius:14px;transition:transform .2s,border-color .3s}
+  .appstore:hover{transform:translateY(-2px) scale(1.03);border-color:var(--violet)}
+  .appstore svg{width:25px;height:25px}.appstore .a1{font-size:11px;opacity:.7;line-height:1.1}.appstore .a2{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;line-height:1.2}
+  .trust{margin-top:24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--ink3);font-size:13.5px}
+  .trust .stars{color:var(--gold);letter-spacing:2px}
 
-  /* app card (hero right + reused) */
-  .frame{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 40px 80px rgba(19,23,58,.16),0 2px 0 rgba(255,255,255,.6) inset;transform:rotate(-1.4deg);transition:transform .4s;max-width:380px;margin:0 auto}
-  .frame:hover{transform:rotate(0)}
-  .scr{border-radius:13px;overflow:hidden;background:linear-gradient(165deg,#171b46,#0e1130);padding:18px 16px 16px;color:#eef}
-  .scr .top{font-size:9px;letter-spacing:2px;font-weight:800;color:var(--goldb);text-transform:uppercase;text-align:center;margin-bottom:10px}
-  .scr .bar{display:flex;justify-content:space-between;margin-bottom:14px}
-  .scr .chip{font-size:11px;font-weight:800;padding:5px 10px;border-radius:50px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
-  .scr .chip.h{color:#ff8fab}.scr .chip.s{color:var(--goldb)}.scr .chip.x{color:#b09bff}
-  .scr .q{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:13px}
-  .scr .ql{font-size:9px;letter-spacing:1.4px;color:#9296c4;font-weight:800;text-transform:uppercase;text-align:center;margin-bottom:7px}
-  .scr .ans{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .scr .a{padding:11px;border-radius:12px;font-weight:800;font-size:14px;text-align:center;border:1px solid rgba(255,255,255,.09);color:#aeb2da;background:rgba(255,255,255,.04)}
-  .scr .a.ok{background:linear-gradient(135deg,#5fe3c0,#33c79f);color:#062019;border-color:transparent}
-  .scr .prog{height:6px;border-radius:50px;background:rgba(255,255,255,.08);overflow:hidden}.scr .prog i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--goldb),#ff7a9c,#9a7bff)}
+  /* mascot */
+  .mascot{position:absolute;width:120px;height:140px;left:-6px;bottom:-26px;z-index:3;animation:bob 3s ease-in-out infinite;filter:drop-shadow(0 12px 20px rgba(124,77,255,.4))}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+  .mascot .eye{transform-box:fill-box;transform-origin:center;animation:blinkEye 4.5s infinite}
+  @keyframes blinkEye{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+  .speech{position:absolute;left:96px;bottom:96px;z-index:4;background:#fff;color:#241852;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;padding:8px 13px;border-radius:14px 14px 14px 3px;box-shadow:0 8px 20px rgba(0,0,0,.3);animation:bob 3s ease-in-out infinite .2s;white-space:nowrap}
 
-  /* score strip */
-  .scoreband{position:relative;margin-top:30px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(250,246,236,.6),transparent)}
-  .scoreband .inner{position:relative;padding:22px 0 20px}
-  .staffsvg{width:100%;height:118px;display:block;overflow:visible}
-  .ph{stroke:var(--goldb);stroke-width:2.4;opacity:.9;filter:drop-shadow(0 0 6px rgba(216,178,90,.7))}
+  /* ── PLAYABLE GAME CARD ── */
+  .play{position:relative;background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--line2);border-radius:26px;padding:22px;box-shadow:0 40px 90px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.07);overflow:hidden}
+  .play::before{content:"";position:absolute;inset:-1px;border-radius:26px;padding:1px;background:linear-gradient(140deg,rgba(168,85,247,.6),transparent 45%,rgba(34,211,238,.4));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+  .play .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .play .tag{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--mint)}
+  .play .sc{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:var(--gold)}
+  .staffbox{background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:16px;padding:14px 10px;margin-bottom:14px;position:relative}
+  .qtext{text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:var(--ink2);margin-bottom:8px}
+  .hearbtn{position:absolute;right:12px;top:12px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--cyan);border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.08);padding:6px 12px;border-radius:50px;cursor:pointer;transition:.2s}
+  .hearbtn:hover{background:rgba(34,211,238,.18);transform:scale(1.05)}
+  .opts{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  .opt{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;padding:14px 4px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:#fff;cursor:pointer;transition:transform .12s,background .2s,border-color .2s}
+  .opt:hover{transform:translateY(-3px) scale(1.03);border-color:var(--violet);background:rgba(168,85,247,.16)}
+  .opt.right{background:linear-gradient(135deg,var(--mint),#19b683);color:#04231a;border-color:transparent;animation:pop .4s}
+  .opt.wrong{background:rgba(251,113,133,.25);border-color:var(--coral);color:#ffd7de;animation:shake .4s}
+  @keyframes pop{50%{transform:scale(1.12)}}
+  @keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  .play .hint{text-align:center;font-size:12px;color:var(--ink3);margin-top:11px;font-weight:600}
+  .confetti{position:absolute;width:9px;height:9px;border-radius:2px;pointer-events:none;z-index:10}
 
-  section{padding:66px 0}
-  .sec-head{max-width:660px;margin-bottom:44px}
-  .sec-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4.8vw,56px);line-height:1.02;letter-spacing:-.015em;margin:14px 0 12px}
-  .sec-head h2 em{font-style:italic;color:var(--gold)}
+  /* ── STATS strip ── */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:42px}
+  .stat{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 8px;transition:transform .2s,border-color .3s}
+  .stat:hover{transform:translateY(-4px) rotate(-1deg);border-color:var(--line2)}
+  .stat .n{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,3.4vw,38px);line-height:1;background:linear-gradient(120deg,var(--violet),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .l{color:var(--ink2);font-size:13px;margin-top:6px;font-weight:600}
+
+  /* ── KEYBOARD ── */
+  .kbsec{padding:40px 0 8px}
+  .kbhead{display:flex;align-items:baseline;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+  .kbhead h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(18px,2.4vw,24px)}
+  .kbhead span{color:var(--ink3);font-size:14px}
+  .kb{position:relative;display:flex;justify-content:center;height:150px;max-width:560px;margin:0 auto;user-select:none;touch-action:none}
+  .wk{position:relative;flex:1;max-width:64px;background:linear-gradient(180deg,#fbfaff,#dcd8ee);border:1px solid #0e0a22;border-radius:0 0 10px 10px;cursor:pointer;box-shadow:inset 0 -8px 12px rgba(120,110,160,.3);transition:.06s}
+  .wk:active,.wk.on{background:linear-gradient(180deg,#cbb8ff,#a987ff);box-shadow:inset 0 -6px 14px rgba(90,60,160,.5);transform:translateY(2px)}
+  .wk span{position:absolute;bottom:9px;left:0;right:0;text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#5b4a8a;pointer-events:none}
+  .bk{position:absolute;top:0;width:8.5%;max-width:40px;height:60%;background:linear-gradient(180deg,#2a2150,#0b0820);border:1px solid #000;border-radius:0 0 8px 8px;cursor:pointer;z-index:3;box-shadow:0 5px 8px rgba(0,0,0,.5);transition:.06s}
+  .bk:active,.bk.on{background:linear-gradient(180deg,#6a4ad0,#3a2580)}
+
+  section{padding:60px 0}
+  .sec-head{text-align:center;max-width:660px;margin:0 auto 42px}
+  .sec-head h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(30px,4.4vw,50px);line-height:1.04;letter-spacing:-.02em;margin:12px 0 12px}
+  .sec-head h2 .hl{background:linear-gradient(110deg,var(--violet),var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent}
   .sec-head p{color:var(--ink2);font-size:17px}
 
-  .moves{border-top:1px solid var(--line)}
-  .move{display:grid;grid-template-columns:78px 1fr auto;gap:26px;align-items:center;padding:26px 8px;border-bottom:1px solid var(--line);position:relative;transition:padding-left .3s,background .3s}
-  .move::before{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--gold),transparent);transition:width .5s}
-  .move:hover{padding-left:18px;background:linear-gradient(90deg,rgba(176,134,58,.05),transparent)}
-  .move:hover::before{width:100%}
-  .move .rn{font-family:'Fraunces',serif;font-weight:500;font-size:32px;color:var(--gold);line-height:1}
-  .move h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;letter-spacing:-.01em}
-  .move p{color:var(--ink2);font-size:15.5px;margin-top:5px;max-width:62ch}
-  .move .ic{width:50px;height:50px;color:var(--ink);opacity:.78;transition:.3s}.move:hover .ic{color:var(--gold);opacity:1;transform:scale(1.08)}
-  .move .ic svg{width:34px;height:34px}
+  /* ── BENTO with animated graphics ── */
+  .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;grid-auto-rows:minmax(180px,auto)}
+  .tile{position:relative;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;overflow:hidden;transition:transform .25s,border-color .3s;display:flex;flex-direction:column}
+  .tile:hover{transform:translateY(-5px);border-color:var(--line2)}
+  .tile .tg{flex:1;min-height:74px;margin-bottom:14px;display:flex;align-items:center;justify-content:center}
+  .tile h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;margin-bottom:5px}
+  .tile p{color:var(--ink2);font-size:14.5px}
+  .t-a{grid-column:span 3}.t-b{grid-column:span 3}.t-c{grid-column:span 2}.t-d{grid-column:span 2}.t-e{grid-column:span 2}.t-f{grid-column:span 4}
+  .tile .halo{position:absolute;width:200px;height:200px;border-radius:50%;filter:blur(54px);opacity:.4;right:-50px;top:-60px;z-index:0}
+  .tile>*{position:relative;z-index:1}
 
-  .show{display:grid;grid-template-columns:.95fr 1.05fr;gap:60px;align-items:center}
-  .cof{position:relative;width:320px;height:320px;margin:0 auto}
-  .cof svg.ring{position:absolute;inset:0;animation:spin 50s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .cof .cn{position:absolute;top:50%;left:50%;width:46px;height:46px;margin:-23px;border-radius:50%;display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--ink);background:var(--card);border:1px solid var(--line);transform:rotate(calc(var(--i)*30deg)) translateY(-132px)}
-  .cof .cn.maj{color:var(--goldd);border-color:var(--rule)}
-  .cof .hub{position:absolute;top:50%;left:50%;width:96px;height:96px;margin:-48px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 38% 32%,#1a1e48,#0e1130);box-shadow:0 14px 34px rgba(19,23,58,.3);z-index:2}
-  .cof .hub svg{width:46px;height:46px;color:var(--goldb)}
-  .show-txt h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,48px);line-height:1.04;margin:12px 0 16px}.show-txt h2 em{font-style:italic;color:var(--gold)}
-  .show-txt p{color:var(--ink2);font-size:17px;margin-bottom:14px}
-  .tagrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-  .tag{font-size:13px;font-weight:600;padding:7px 15px;border-radius:50px;border:1px solid var(--line);color:var(--ink2);transition:.2s}.tag:hover{border-color:var(--gold);color:var(--gold)}
+  /* tile graphics */
+  .g-staff line{stroke:rgba(255,255,255,.25);stroke-width:1.4}
+  .g-note{fill:var(--violet);animation:notehop 2.6s ease-in-out infinite}
+  @keyframes notehop{0%,100%{transform:translateY(0)}25%{transform:translateY(-14px)}50%{transform:translateY(-22px)}75%{transform:translateY(-10px)}}
+  .g-ph{stroke:var(--gold);stroke-width:2;animation:phsweep 2.6s linear infinite}
+  @keyframes phsweep{from{transform:translateX(-40px)}to{transform:translateX(60px)}}
+  .wave-r{fill:none;stroke:var(--cyan);stroke-width:2.4;transform-origin:14px 50%;animation:waver 2s ease-out infinite}
+  .wave-r.w2{animation-delay:.4s}.wave-r.w3{animation-delay:.8s}
+  @keyframes waver{0%{opacity:.9;transform:scale(.4)}80%,100%{opacity:0;transform:scale(1.5)}}
+  .pk{fill:rgba(255,255,255,.12);animation:pklight 2.4s ease-in-out infinite}
+  .pk:nth-child(2){animation-delay:.25s}.pk:nth-child(3){animation-delay:.5s}.pk:nth-child(4){animation-delay:.75s}.pk:nth-child(5){animation-delay:1s}
+  @keyframes pklight{0%,70%,100%{fill:rgba(255,255,255,.12)}35%{fill:var(--mint)}}
+  .needle{transform-origin:50px 60px;animation:swing 2.4s ease-in-out infinite}
+  @keyframes swing{0%,100%{transform:rotate(-32deg)}50%{transform:rotate(32deg)}}
+  .flame{fill:var(--coral);transform-origin:center bottom;animation:flick 1.1s ease-in-out infinite}
+  @keyframes flick{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.08,1.14) rotate(2deg)}}
+  .xp{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;fill:var(--gold);animation:xprise 2.4s ease-out infinite}
+  @keyframes xprise{0%{opacity:0;transform:translateY(8px)}20%{opacity:1}80%,100%{opacity:0;transform:translateY(-22px)}}
+  /* circle of fifths tile */
+  .coftile{grid-column:span 2;grid-row:span 2;align-items:center;justify-content:center;text-align:center}
+  .cof{position:relative;width:188px;height:188px;margin:6px auto 12px}
+  .cof .ring2{position:absolute;inset:0;animation:spin 44s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+  .cof .cn{position:absolute;top:50%;left:50%;width:30px;height:30px;margin:-15px;border-radius:50%;display:grid;place-items:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:var(--ink2);background:var(--card2);border:1px solid var(--line);transform:rotate(calc(var(--i)*30deg)) translateY(-80px)}
+  .cof .cn.maj{color:var(--gold);border-color:rgba(251,191,36,.4)}
+  .cof .hub{position:absolute;top:50%;left:50%;width:54px;height:54px;margin:-27px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 38% 30%,#2a1d5c,#120c2e);z-index:2}
+  .cof .hub svg{width:28px;height:28px;color:var(--gold)}
 
-  .quote{position:relative;text-align:center;max-width:860px;margin:0 auto;padding:0 10px}
-  .quote .qm{font-family:'Fraunces',serif;font-size:110px;line-height:.5;color:var(--gold);opacity:.4;height:54px}
-  .quote blockquote{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(25px,3.4vw,38px);line-height:1.3;letter-spacing:-.01em;margin-bottom:22px}
-  .quote blockquote em{font-style:italic;color:var(--gold)}
-  .quote .by{color:var(--ink2);font-size:15px;font-weight:600}
+  /* marquee */
+  .marquee{margin:54px 0 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:hidden;white-space:nowrap;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .track{display:inline-block;animation:scroll 26s linear infinite}.track span{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:var(--ink2);margin:0 22px}.track b{color:var(--gold)}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  .quote{text-align:center;max-width:820px;margin:0 auto}
+  .quote blockquote{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,3.3vw,38px);line-height:1.28;letter-spacing:-.02em;margin-bottom:20px}
+  .quote blockquote .hl{background:linear-gradient(110deg,var(--mint),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .quote .by{color:var(--ink2);font-size:15px;font-weight:600;margin-bottom:24px}
 
   .coda{text-align:center;position:relative}
-  .coda h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(38px,5.6vw,78px);line-height:1;letter-spacing:-.02em;margin-bottom:18px}.coda h2 em{font-style:italic;color:var(--gold)}
-  .coda p{color:var(--ink2);font-size:18px;margin-bottom:32px}
+  .coda h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(36px,5.4vw,72px);line-height:1;letter-spacing:-.03em;margin-bottom:16px}
+  .coda h2 .hl{background:linear-gradient(110deg,var(--violet),var(--coral) 55%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .coda p{color:var(--ink2);font-size:18px;margin-bottom:30px}
 
-  footer{border-top:1px solid var(--line);padding:40px 0;margin-top:30px}
+  footer{border-top:1px solid var(--line);padding:38px 0;margin-top:24px}
   .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;color:var(--ink3);font-size:14px}
-  .foot a{transition:.2s}.foot a:hover{color:var(--gold)}.foot-links{display:flex;gap:24px;flex-wrap:wrap}
-  .foot .mail{color:var(--ink2);font-weight:600}
+  .foot a:hover{color:var(--violet)}.foot-links{display:flex;gap:22px;flex-wrap:wrap}.foot .mail{color:var(--ink2);font-weight:600}
 
-  /* tablet / small */
   @media(max-width:900px){
-    header{padding:8px 0 0}
-    .hero{grid-template-columns:1fr;gap:36px;text-align:center}
-    .hero>*{min-width:0}.hero .col-l{order:1}.hero .frame{order:2}
-    h1{max-width:none;margin:0 auto}.lead{margin-left:auto;margin-right:auto}.cta,.trust{justify-content:center}
-    .show{grid-template-columns:1fr;gap:40px}.show-txt{text-align:center}.tagrow{justify-content:center}
-    .sec-head{text-align:center;margin-left:auto;margin-right:auto}
-    .nav-r a.lk{display:none}.bigclef{display:none}
-    .move>*{min-width:0}.move{grid-template-columns:44px 1fr;gap:16px}.move .ic{display:none}
-    .frame{transform:none}}
-  /* phones */
+    .hero{grid-template-columns:1fr;gap:34px}.hero>*{min-width:0}
+    .lead,.badge{margin-left:auto;margin-right:auto}.herocta,.trust{justify-content:center}
+    header .col-l{text-align:center}.mascot{display:none}.speech{display:none}
+    .nav-r a.lk{display:none}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .bento{grid-template-columns:repeat(2,1fr)}
+    .t-a,.t-b,.t-c,.t-d,.t-e,.t-f,.coftile{grid-column:span 2;grid-row:auto}}
   @media(max-width:560px){
-    nav .nav{height:64px}.nav-r{gap:14px}.logo b{font-size:24px}
-    .lang{padding:6px 11px;font-size:12px}.pillbtn{padding:10px 18px;font-size:14px}
-    .hero{padding:18px 0 22px;gap:30px}
-    h1{font-size:clamp(34px,10.5vw,46px);line-height:1.02}
-    .lead{font-size:16px;margin:22px auto 26px}
-    .cta{gap:13px}.appstore{padding:12px 20px}
-    .trust{margin-top:24px;gap:10px;font-size:12.5px;justify-content:center}
-    .frame{max-width:340px}
-    section{padding:50px 0}
-    .sec-head{margin-bottom:34px}
-    .sec-head h2{font-size:clamp(28px,8.5vw,38px)}
-    .move{padding:22px 2px;grid-template-columns:38px 1fr;gap:14px}
-    .move .rn{font-size:26px}.move h3{font-size:20px}.move p{font-size:14.5px;margin-top:4px}
-    .show{gap:32px}.cof{width:280px;height:280px}.cof .cn{transform:rotate(calc(var(--i)*30deg)) translateY(-116px)}
-    .quote .qm{font-size:88px;height:44px}.quote blockquote{font-size:22px}
-    .coda h2{font-size:clamp(32px,11vw,46px)}.coda p{font-size:16px}
-    .foot{justify-content:center;text-align:center;flex-direction:column;gap:14px}.foot-links{justify-content:center}}
-  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}.underw path{stroke-dashoffset:0}h1 .w{opacity:1;transform:none}}
+    h1{font-size:clamp(38px,11vw,52px)}.bento{grid-template-columns:1fr}.t-a,.t-b,.t-c,.t-d,.t-e,.t-f,.coftile{grid-column:span 1}
+    .stats{grid-template-columns:repeat(2,1fr)}.kb{height:124px}.opts{gap:7px}.opt{font-size:15px;padding:13px 2px}
+    section{padding:46px 0}.foot{flex-direction:column;text-align:center}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<div class="paper-tex"></div><div class="vignette"></div>
+<div class="bg"></div><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="deco" id="deco"></div>
 
 <svg style="display:none">
   <symbol id="clef" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2c-1.5 0-2.7 1.3-2.7 3 0 1.2.5 2.1 1.2 3.2-2 1.8-3.5 3.6-3.5 6.1 0 2.7 2 4.7 4.6 4.7.5 0 1-.1 1.4-.2l.2 2.1c.1 1.4-.7 2.3-1.8 2.3-.9 0-1.6-.5-1.7-1.2.6-.1 1-.6 1-1.2 0-.7-.6-1.3-1.3-1.3-.8 0-1.4.7-1.4 1.6 0 1.6 1.5 2.8 3.4 2.8 2 0 3.5-1.5 3.3-3.6l-.2-2.4c1.4-.6 2.3-1.9 2.3-3.5 0-1.9-1.4-3.3-3.2-3.3-.2 0-.5 0-.7.1l-.3-2.8c.9-1.1 1.6-2.2 1.6-3.6 0-1.8-1.2-3.1-2.5-3.1zm0 1.4c.5 0 .9.7.9 1.7 0 .9-.4 1.6-1 2.4-.5-.8-.8-1.5-.8-2.3 0-1 .4-1.8.9-1.8zm.6 8.3c1 0 1.8.9 1.8 2.1 0 .9-.5 1.7-1.3 2.1l-.5-4.1zm-1.5.3l.5 4.2c-.2.1-.5.1-.7.1-1.7 0-3-1.3-3-3.1 0-1.6 1-2.9 2.5-4.3l.7 3.1z"/></symbol>
   <symbol id="apple" viewBox="0 0 24 24"><path fill="currentColor" d="M17.05 12.04c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.71-3.19-1.73-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.1 8.79.73 1.06 1.6 2.25 2.74 2.21 1.1-.05 1.52-.71 2.85-.71 1.33 0 1.71.71 2.88.69 1.19-.02 1.94-1.08 2.67-2.15.84-1.23 1.19-2.42 1.21-2.48-.03-.01-2.32-.89-2.34-3.53zM14.88 5.6c.61-.74 1.02-1.77.91-2.8-.88.04-1.94.59-2.57 1.32-.56.65-1.06 1.7-.93 2.7.98.08 1.98-.5 2.59-1.22z"/></symbol>
-  <symbol id="i-note" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="16" cy="16" r="3" fill="currentColor"/></symbol>
-  <symbol id="i-ear" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M4 12a8 8 0 1 1 11 7.4M9 12a3 3 0 1 1 6 0c0 2-2 2.5-2 4.5M11 21h.01"/></symbol>
-  <symbol id="i-piano" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" d="M9 5v9M15 5v9M3 14h18"/></symbol>
-  <symbol id="i-tuner" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M4 18a8 8 0 1 1 16 0"/><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 18l4-6"/><circle cx="12" cy="18" r="1.6" fill="currentColor"/></symbol>
-  <symbol id="i-flame" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c0-1-.5-2-1-2.5C15 11 16 13 16 15a4 4 0 1 1-8 0c0-5 4-8 4-13z"/></symbol>
-  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 9h18M8 3v4M16 3v4M8 14l2 2 4-4"/></symbol>
 </svg>
 
 <nav><div class="wrap nav">
-  <div class="logo"><svg class="clef"><use href="#clef"/></svg><b class="serif">Klef</b></div>
+  <div class="logo"><svg class="clef"><use href="#clef"/></svg><b>Klef</b></div>
   <div class="nav-r">
     <a href="#features" class="lk" data-en="Features">Özellikler</a>
-    <a href="#theory" class="lk" data-en="Theory">Teori</a>
+    <a href="#play" class="lk" data-en="Try it">Dene</a>
     <button class="lang" id="langBtn">🌐 <span id="langLabel">EN</span></button>
-    <a href="https://apps.apple.com/app/id6773070466" class="pillbtn gold mag" data-en="Get it">İndir</a>
+    <a href="https://apps.apple.com/app/id6773070466" class="cta-btn" data-en="Get it">İndir</a>
   </div>
 </div></nav>
 
-<header>
-  <svg class="bigclef" viewBox="0 0 24 24"><use href="#clef"/></svg>
-  <div class="wrap hero">
-    <div class="col-l">
-      <h1 class="serif" data-en='<span class="w">Notes are</span> <span class="w">no longer</span> <span class="w"><span class="underw"><em>strangers</em><svg viewBox="0 0 220 12" preserveAspectRatio="none"><path d="M4 8 Q60 1 120 6 T216 5"/></svg></span></span> <span class="w">to you.</span>'>
-        <span class="w">Notalar</span> <span class="w">artık bir</span> <span class="w"><span class="underw"><em>yabancı</em><svg viewBox="0 0 220 12" preserveAspectRatio="none"><path d="M4 8 Q60 1 120 6 T216 5"/></svg></span></span> <span class="w">değil.</span>
-      </h1>
-      <p class="lead rv d1" data-en='<span class="drop">Learn music like a game.</span> Build your sight-reading, ear and rhythm in just a few minutes a day — designed with conservatory pedagogy, a little conservatory in your pocket.'><span class="drop">Müziği oyun gibi öğren.</span> Nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada geliştir — konservatuvar pedagojisiyle tasarlanmış, cebinde küçük bir konservatuvar.</p>
-      <div class="cta rv d2">
-        <a href="https://apps.apple.com/app/id6773070466" class="appstore mag"><svg><use href="#apple"/></svg><span><span class="a1" data-en="Download on the">App Store'dan</span><br><span class="a2" data-en="APP STORE">İNDİR</span></span></a>
-        <a href="#features" class="ghost"><span class="pl"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span data-en="How it works?">Nasıl çalışır?</span></a>
-      </div>
-      <div class="trust rv d3"><span class="stars">★★★★★</span><span data-en="Tested with real teachers">Gerçek öğretmenlerle test edildi</span><span class="flags">🇹🇷 🇬🇧 🇪🇸 🇩🇪 🇫🇷</span></div>
+<header id="play"><div class="wrap hero">
+  <div class="col-l">
+    <span class="badge"><span class="dot"></span><span data-en="Live — playable right here">Canlı — hemen burada oyna</span></span>
+    <h1 class="gro" data-en='<span class="hl">Play</span> music.<br>Learn it for real.'><span class="hl">Müziği</span> oyna,<br>gerçekten öğren.</h1>
+    <p class="lead" data-en="Read notes, train your ear, find your rhythm — a few minutes a day. Try the real thing right here, then take it with you.">Nota okumayı, müzik kulağını ve ritmini günde birkaç dakikada öğren. Sağdaki mini oyunu hemen dene — sonra cebine al.</p>
+    <div class="herocta">
+      <a href="https://apps.apple.com/app/id6773070466" class="appstore"><svg><use href="#apple"/></svg><span><span class="a1" data-en="Download on the">App Store'dan</span><br><span class="a2">İNDİR</span></span></a>
     </div>
-    <div class="frame rv d2">
-      <div class="scr">
-        <div class="top" data-en="🎼 Practice · Treble Clef">🎼 Çalışma · Sol Anahtarı</div>
-        <div class="bar"><span class="chip h">♥ 5</span><span class="chip s">🔥 12</span><span class="chip x">✦ 1.240</span></div>
-        <div class="q"><div class="ql" data-en="Which note is this?">Bu nota hangisi?</div>
-          <svg viewBox="0 0 248 96" style="width:100%;display:block">
-            <g stroke="rgba(255,255,255,.26)" stroke-width="1.4"><line x1="12" y1="24" x2="238" y2="24"/><line x1="12" y1="38" x2="238" y2="38"/><line x1="12" y1="52" x2="238" y2="52"/><line x1="12" y1="66" x2="238" y2="66"/><line x1="12" y1="80" x2="238" y2="80"/></g>
-            <use href="#clef" transform="translate(8,12) scale(2.9)" style="color:#d8b25a"/>
-            <g fill="#d8b25a"><g><ellipse cx="120" cy="66" rx="7" ry="5" transform="rotate(-20 120 66)"/><rect x="125.4" y="40" width="2.2" height="26"/></g><g><ellipse cx="200" cy="52" rx="7" ry="5" transform="rotate(-20 200 52)"/><rect x="205.4" y="26" width="2.2" height="26"/></g></g>
-            <g><ellipse cx="160" cy="38" rx="7.6" ry="5.4" transform="rotate(-20 160 38)" fill="#fff"/><rect x="165.6" y="12" width="2.4" height="26" fill="#fff"/><circle cx="160" cy="38" r="14" fill="none" stroke="#fff" stroke-width="1.6"><animate attributeName="r" values="12;17;12" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;.2;.7" dur="1.6s" repeatCount="indefinite"/></circle></g>
-          </svg>
-        </div>
-        <div class="ans" style="margin-bottom:12px"><div class="a">Do</div><div class="a ok">Re ✓</div><div class="a">Mi</div><div class="a">Fa</div></div>
-        <div class="prog"><i></i></div>
-      </div>
-    </div>
+    <div class="trust"><span class="stars">★★★★★</span><span data-en="Tested with real teachers">Gerçek öğretmenlerle test edildi</span><span>🇹🇷 🇬🇧 🇪🇸 🇩🇪 🇫🇷</span></div>
   </div>
 
-  <div class="scoreband"><div class="wrap inner rv">
-    <svg class="staffsvg" viewBox="0 0 1120 118" preserveAspectRatio="xMidYMid meet" id="staff">
-      <g stroke="rgba(19,23,58,.22)" stroke-width="1.4">
-        <line x1="0" y1="28" x2="1120" y2="28"/><line x1="0" y1="44" x2="1120" y2="44"/><line x1="0" y1="60" x2="1120" y2="60"/><line x1="0" y1="76" x2="1120" y2="76"/><line x1="0" y1="92" x2="1120" y2="92"/>
-      </g>
-      <use href="#clef" transform="translate(8,18) scale(3.4)" style="color:var(--ink)" opacity=".82"/>
-      <g class="serif" fill="rgba(19,23,58,.55)" font-size="32" font-weight="600"><text x="74" y="56">4</text><text x="74" y="88">4</text></g>
-      <g id="notes" fill="var(--ink)">
-        <g data-n><ellipse cx="160" cy="92" rx="8.4" ry="6" transform="rotate(-18 160 92)"/><rect x="167" y="56" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="250" cy="76" rx="8.4" ry="6" transform="rotate(-18 250 76)"/><rect x="257" y="40" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="340" cy="68" rx="8.4" ry="6" transform="rotate(-18 340 68)"/><rect x="347" y="32" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="430" cy="52" rx="8.4" ry="6" transform="rotate(-18 430 52)"/><rect x="437" y="16" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="540" cy="44" rx="8.4" ry="6" transform="rotate(-18 540 44)"/><rect x="547" y="8" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="650" cy="52" rx="8.4" ry="6" transform="rotate(-18 650 52)"/><rect x="657" y="16" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="760" cy="68" rx="8.4" ry="6" transform="rotate(-18 760 68)"/><rect x="767" y="32" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="870" cy="60" rx="8.4" ry="6" transform="rotate(-18 870 60)"/><rect x="877" y="24" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="980" cy="76" rx="8.4" ry="6" transform="rotate(-18 980 76)"/><rect x="987" y="40" width="2.4" height="36"/></g>
-        <g data-n><ellipse cx="1070" cy="60" rx="8.4" ry="6" transform="rotate(-18 1070 60)"/><rect x="1077" y="24" width="2.4" height="36"/></g>
-      </g>
-      <line class="ph" id="playhead" x1="120" y1="14" x2="120" y2="106"/>
-    </svg>
-  </div></div>
+  <!-- PLAYABLE MINI-GAME -->
+  <div class="play rv d1" id="gamecard">
+    <div class="ph"><span class="tag" data-en="Read the note">Notayı oku</span><span class="sc">🔥 <b id="streak">0</b> · <span data-en="Treble Clef">Sol Anahtarı</span></span></div>
+    <div class="staffbox">
+      <div class="qtext" data-en="Which note is on the staff?">Portedeki nota hangisi?</div>
+      <button class="hearbtn" id="hear">🔊 <span data-en="Hear">Duy</span></button>
+      <svg viewBox="0 0 300 150" style="width:100%;display:block" id="staffsvg">
+        <g stroke="rgba(255,255,255,.28)" stroke-width="1.5"><line x1="40" y1="40" x2="286" y2="40"/><line x1="40" y1="52" x2="286" y2="52"/><line x1="40" y1="64" x2="286" y2="64"/><line x1="40" y1="76" x2="286" y2="76"/><line x1="40" y1="88" x2="286" y2="88"/></g>
+        <use href="#clef" transform="translate(40,24) scale(3.4)" style="color:var(--gold)"/>
+        <line id="ledger" x1="150" y1="100" x2="184" y2="100" stroke="rgba(255,255,255,.5)" stroke-width="1.5" opacity="0"/>
+        <g id="nh"><ellipse id="head" cx="172" cy="76" rx="9" ry="6.6" transform="rotate(-18 172 76)" fill="#fff"/><rect id="stem" x="180" y="46" width="2.6" height="30" fill="#fff"/></g>
+      </svg>
+    </div>
+    <div class="opts" id="opts"></div>
+    <div class="hint" id="hint" data-en="Tap the right note — build a streak 🎵">Doğru notaya dokun — seriyi büyüt 🎵</div>
+  </div>
+</div>
+
+<div class="wrap"><div class="stats">
+  <div class="stat rv"><div class="n"><span data-c="30">0</span></div><div class="l" data-en="day program">günlük program</div></div>
+  <div class="stat rv d1"><div class="n"><span data-c="4">0</span></div><div class="l" data-en="clefs">anahtar</div></div>
+  <div class="stat rv d2"><div class="n"><span data-c="5">0</span></div><div class="l" data-en="languages">dil</div></div>
+  <div class="stat rv d3"><div class="n">∞</div><div class="l" data-en="practice & games">pratik & oyun</div></div>
+</div></div>
 </header>
 
-<!-- FEATURES -->
-<section id="features"><div class="wrap">
-  <div class="sec-head rv"><span class="label" data-en="Features">Özellikler</span><h2 class="serif" data-en="One app, <em>a whole conservatory.</em>">Tek uygulama, <em>koca bir konservatuvar.</em></h2><p data-en="A few minutes a day. From zero to mastery, step by step.">Her gün birkaç dakika. Sıfırdan ustalığa, adım adım.</p></div>
-  <div class="moves">
-    <div class="move rv"><div class="rn">I</div><div><h3 data-en="Sight-Reading">Nota Okuma</h3><p data-en="Fluent reading in treble, bass and C clefs — on reflex.">Sol, Fa ve Do anahtarlarında refleksle, akıcı deşifre.</p></div><div class="ic"><svg><use href="#i-note"/></svg></div></div>
-    <div class="move rv"><div class="rn">II</div><div><h3 data-en="Ear Training">Kulak Eğitimi</h3><p data-en="Intervals and chords — recognize what you hear, not just what you see.">Aralıklar ve akorlar — duyduğunu tanı, yalnızca gördüğünü değil.</p></div><div class="ic"><svg><use href="#i-ear"/></svg></div></div>
-    <div class="move rv"><div class="rn">III</div><div><h3 data-en="Chord Lab">Akor Laboratuvarı</h3><p data-en="Chords, scales, modes, the circle of fifths and progressions at your fingertips.">Akorlar, gamlar, modlar, beşli çemberi ve progresyonlar elinin altında.</p></div><div class="ic"><svg><use href="#i-piano"/></svg></div></div>
-    <div class="move rv"><div class="rn">IV</div><div><h3 data-en="Pro Tools">Pro Araçlar</h3><p data-en="A rock-steady tuner, metronome and vocal trainer — all built in.">Kararlı akort aleti, metronom ve vokal eğitici — hepsi içinde.</p></div><div class="ic"><svg><use href="#i-tuner"/></svg></div></div>
-    <div class="move rv"><div class="rn">V</div><div><h3 data-en="Like a Game">Oyun Gibi</h3><p data-en="Streaks, quests, weekly leagues and certificates — you'll want to keep going.">Seriler, görevler, haftalık ligler ve sertifikalar — devam etmek istersin.</p></div><div class="ic"><svg><use href="#i-flame"/></svg></div></div>
-    <div class="move rv"><div class="rn">VI</div><div><h3 data-en="Read in 30 Days">30 Günde Oku</h3><p data-en="A clear-goal program: step by step, read music fluently in 30 days.">Net hedefli program: adım adım, 30 günde akıcı nota okumaya ulaş.</p></div><div class="ic"><svg><use href="#i-cal"/></svg></div></div>
-  </div>
+<!-- KEYBOARD -->
+<section class="kbsec"><div class="wrap">
+  <div class="kbhead"><h3 class="gro" data-en="🎹 Touch it — hear it">🎹 Dokun — sesini duy</h3><span data-en="a real octave, right in your browser">tarayıcında gerçek bir oktav</span></div>
+  <div class="kb" id="kb"></div>
 </div></section>
 
-<!-- THEORY / CIRCLE OF FIFTHS -->
-<section id="theory"><div class="wrap show">
-  <div class="cof rv">
-    <svg class="ring" viewBox="0 0 320 320"><circle cx="160" cy="160" r="150" fill="none" stroke="var(--rule)" stroke-width="1"/><circle cx="160" cy="160" r="118" fill="none" stroke="var(--line)" stroke-width="1"/></svg>
-    <div class="ring">
-      <div class="cn maj" style="--i:0">C</div><div class="cn maj" style="--i:1">G</div><div class="cn maj" style="--i:2">D</div><div class="cn maj" style="--i:3">A</div>
-      <div class="cn maj" style="--i:4">E</div><div class="cn maj" style="--i:5">B</div><div class="cn" style="--i:6">F♯</div><div class="cn" style="--i:7">D♭</div>
-      <div class="cn" style="--i:8">A♭</div><div class="cn" style="--i:9">E♭</div><div class="cn" style="--i:10">B♭</div><div class="cn maj" style="--i:11">F</div>
-    </div>
-    <div class="hub"><svg><use href="#clef"/></svg></div>
+<!-- FEATURES BENTO -->
+<section id="features"><div class="wrap">
+  <div class="sec-head rv"><span class="label" data-en="Everything inside">Hepsi içinde</span><h2 class="gro" data-en="One app, <span class='hl'>a whole conservatory.</span>">Tek uygulama, <span class="hl">koca bir konservatuvar.</span></h2></div>
+  <div class="bento">
+    <div class="tile t-a rv"><div class="halo" style="background:var(--violet)"></div>
+      <div class="tg"><svg viewBox="0 0 160 80" width="170"><g class="g-staff"><line x1="6" y1="20" x2="154" y2="20"/><line x1="6" y1="34" x2="154" y2="34"/><line x1="6" y1="48" x2="154" y2="48"/><line x1="6" y1="62" x2="154" y2="62"/><line x1="6" y1="76" x2="154" y2="76"/></g><line class="g-ph" x1="80" y1="8" x2="80" y2="80"/><ellipse class="g-note" cx="80" cy="62" rx="9" ry="6.6" transform="rotate(-18 80 62)"/></svg></div>
+      <h3 data-en="Sight-Reading">Nota Okuma</h3><p data-en="Treble, bass & C clefs — fluent reading, on reflex.">Sol, Fa ve Do anahtarlarında refleksle akıcı deşifre.</p></div>
+
+    <div class="tile t-b rv d1"><div class="halo" style="background:var(--cyan)"></div>
+      <div class="tg"><svg viewBox="0 0 90 80" width="100"><path d="M14 40 a26 26 0 0 1 40-22" fill="none" stroke="var(--cyan)" stroke-width="3" stroke-linecap="round"/><circle cx="14" cy="50" r="7" fill="var(--cyan)"/><circle class="wave-r" cx="14" cy="50" r="14"/><circle class="wave-r w2" cx="14" cy="50" r="14"/><circle class="wave-r w3" cx="14" cy="50" r="14"/></svg></div>
+      <h3 data-en="Ear Training">Kulak Eğitimi</h3><p data-en="Intervals & chords — recognize what you hear.">Aralıklar ve akorlar — duyduğunu tanı, gördüğünü değil.</p></div>
+
+    <div class="coftile tile rv d2"><div class="halo" style="background:var(--gold)"></div>
+      <div class="cof">
+        <svg class="ring2" viewBox="0 0 188 188"><circle cx="94" cy="94" r="86" fill="none" stroke="rgba(251,191,36,.3)" stroke-width="1"/></svg>
+        <div class="ring2"><div class="cn maj" style="--i:0">C</div><div class="cn maj" style="--i:1">G</div><div class="cn maj" style="--i:2">D</div><div class="cn maj" style="--i:3">A</div><div class="cn maj" style="--i:4">E</div><div class="cn maj" style="--i:5">B</div><div class="cn" style="--i:6">F♯</div><div class="cn" style="--i:7">D♭</div><div class="cn" style="--i:8">A♭</div><div class="cn" style="--i:9">E♭</div><div class="cn" style="--i:10">B♭</div><div class="cn maj" style="--i:11">F</div></div>
+        <div class="hub"><svg><use href="#clef"/></svg></div>
+      </div>
+      <h3 class="gro" style="font-size:18px" data-en="Theory, alive">Teori, canlı</h3><p data-en="Circle of fifths, chords, scales & modes.">Beşli çemberi, akorlar, gamlar, modlar.</p></div>
+
+    <div class="tile t-d rv"><div class="halo" style="background:var(--mint)"></div>
+      <div class="tg"><svg viewBox="0 0 130 70" width="140"><g><rect class="pk" x="6" y="6" width="22" height="58" rx="4"/><rect class="pk" x="30" y="6" width="22" height="58" rx="4"/><rect class="pk" x="54" y="6" width="22" height="58" rx="4"/><rect class="pk" x="78" y="6" width="22" height="58" rx="4"/><rect class="pk" x="102" y="6" width="22" height="58" rx="4"/></g></svg></div>
+      <h3 data-en="Chord Lab">Akor Lab</h3><p data-en="Chords, scales & modes on piano and guitar.">Piyano ve gitarda akor, gam, mod.</p></div>
+
+    <div class="tile t-e rv d1"><div class="halo" style="background:var(--violet)"></div>
+      <div class="tg"><svg viewBox="0 0 100 80" width="110"><path d="M14 64 a36 36 0 0 1 72 0" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="4" stroke-linecap="round"/><g class="needle"><line x1="50" y1="60" x2="50" y2="28" stroke="var(--gold)" stroke-width="3.4" stroke-linecap="round"/><circle cx="50" cy="60" r="5" fill="var(--gold)"/></g></svg></div>
+      <h3 data-en="Pro Tools">Pro Araçlar</h3><p data-en="Steady tuner, metronome & vocal trainer.">Akort aleti, metronom, vokal eğitici.</p></div>
+
+    <div class="tile t-f rv d2"><div class="halo" style="background:var(--coral)"></div>
+      <div class="tg"><svg viewBox="0 0 120 80" width="120"><path class="flame" d="M60 14 c8 18-12 22-12 38 a16 16 0 0 0 32 0 c0-7-4-12-7-15 c3 9-2 14-6 11 c-5-4 5-14 1-34z"/><text class="xp" x="84" y="40">+10 XP</text></svg></div>
+      <h3 data-en="It's a game">Oyun gibi</h3><p data-en="Streaks, quests, weekly leagues, certificates & a 30-day reading program — you'll want to keep going.">Seriler, görevler, haftalık ligler, sertifikalar ve 30 günlük okuma programı — devam etmek istersin.</p></div>
   </div>
-  <div class="show-txt rv d1">
-    <span class="label" data-en="Theory, made visible">Teori, görünür hale geliyor</span>
-    <h2 class="serif" data-en="Explore the map of music <em>with your hands.</em>">Müziğin haritasını <em>elinle keşfet.</em></h2>
-    <p data-en="The circle of fifths, chords, scales and modes — not rote memorization, but by touch and by ear. See how keys relate; let it all click into place.">Beşli çemberi, akorlar, gamlar ve modlar — kuru ezber değil, dokunarak, duyarak. Tonaliteler arasındaki ilişkiyi gör; her şey yerine otursun.</p>
-    <p data-en="Try it on piano and guitar in the Chord Lab — play it, hear it.">Akor Laboratuvarı'nda piyano ve gitar üzerinde dene, çal, duy.</p>
-    <div class="tagrow"><span class="tag" data-en="Circle of Fifths">Beşli Çemberi</span><span class="tag" data-en="Chords">Akorlar</span><span class="tag" data-en="Modes">Modlar</span><span class="tag" data-en="Progressions">Progresyon</span><span class="tag" data-en="Inversions">İnversiyon</span></div>
-  </div>
+
+  <div class="marquee"><div class="track"><span>🎵 Nota Okuma</span><span>👂 <b>Kulak</b></span><span>🎹 Akorlar</span><span>🎸 Gamlar</span><span>⭕ <b>Beşli Çemberi</b></span><span>🎚️ Akort</span><span>🎤 Vokal</span><span>🔥 <b>Ligler</b></span><span>🏆 Sertifika</span><span>🎵 Nota Okuma</span><span>👂 <b>Kulak</b></span><span>🎹 Akorlar</span><span>🎸 Gamlar</span><span>⭕ <b>Beşli Çemberi</b></span><span>🎚️ Akort</span><span>🎤 Vokal</span><span>🔥 <b>Ligler</b></span><span>🏆 Sertifika</span></div></div>
 </div></section>
 
 <!-- TEACHERS -->
 <section><div class="wrap quote rv">
-  <div class="qm">”</div>
-  <blockquote class="serif" data-en="Built on conservatory pedagogy, <em>tested</em> with real teachers and students. Manage your class, track progress, assign homework.">Konservatuvar pedagojisiyle kuruldu, gerçek öğretmen ve öğrencilerle <em>test edildi.</em> Sınıfını yönet, gelişimi takip et, ödev ver.</blockquote>
+  <blockquote class="gro" data-en="Built on conservatory pedagogy, <span class='hl'>tested with real teachers.</span> Manage your class, track progress, assign homework.">Konservatuvar pedagojisiyle kuruldu, <span class="hl">gerçek öğretmenlerle test edildi.</span> Sınıfını yönet, gelişimi takip et, ödev ver.</blockquote>
   <div class="by" data-en="— Designed for teachers">— Öğretmenler için tasarlandı</div>
-  <a href="https://apps.apple.com/app/id6773070466" class="pillbtn gold mag" style="margin-top:26px" data-en="Try it Free">Ücretsiz Dene</a>
+  <a href="https://apps.apple.com/app/id6773070466" class="cta-btn" data-en="Try it Free">Ücretsiz Dene</a>
 </div></section>
 
 <!-- CODA -->
 <section><div class="wrap coda rv">
-  <h2 class="serif" data-en="Read your <em>first note</em> today.">Bugün <em>ilk notanı</em> oku.</h2>
-  <p data-en="Start in a minute — make it a habit that sticks.">Bir dakikada başla — alışkanlığa dönüşsün, kalıcı olsun.</p>
-  <a href="https://apps.apple.com/app/id6773070466" class="appstore mag" style="margin:0 auto"><svg><use href="#apple"/></svg><span><span class="a1" data-en="Download on the">App Store'dan</span><br><span class="a2" data-en="APP STORE">İNDİR</span></span></a>
+  <h2 class="gro" data-en="Your <span class='hl'>first note</span> — today.">Bugün <span class="hl">ilk notanı</span> oku.</h2>
+  <p data-en="Start in a minute. Make it a habit that sticks.">Bir dakikada başla — alışkanlığa dönüşsün.</p>
+  <a href="https://apps.apple.com/app/id6773070466" class="appstore" style="display:inline-flex"><svg><use href="#apple"/></svg><span><span class="a1" data-en="Download on the">App Store'dan</span><br><span class="a2">İNDİR</span></span></a>
 </div></section>
 
 <footer><div class="wrap foot">
-  <div class="logo"><svg class="clef" style="width:22px;height:25px"><use href="#clef"/></svg><b class="serif" style="font-size:22px;font-weight:600">Klef</b></div>
+  <div class="logo"><svg class="clef" style="width:22px;height:25px"><use href="#clef"/></svg><b class="gro" style="font-size:21px;font-weight:700">Klef</b></div>
   <div class="foot-links">
     <a href="https://klefapp.github.io/klef-legal/" data-en="Privacy">Gizlilik</a>
     <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-en="Terms">Şartlar</a>
@@ -317,46 +325,51 @@
 <script>
   const RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-  // ── i18n (TR / EN) ──
-  const i18nEls = [...document.querySelectorAll('[data-en]')];
-  i18nEls.forEach(e=>e.dataset.tr = e.innerHTML);  // capture Turkish originals
-  function setLang(l){
-    document.documentElement.lang = l;
-    i18nEls.forEach(e=>{ e.innerHTML = (l==='en') ? e.dataset.en : e.dataset.tr; });
-    document.getElementById('langLabel').textContent = (l==='en') ? 'TR' : 'EN';
-    try{ localStorage.setItem('klef_lang', l); }catch(e){}
-  }
-  let saved = null; try{ saved = localStorage.getItem('klef_lang'); }catch(e){}
-  const lang = saved || ((navigator.language||'').toLowerCase().startsWith('tr') ? 'tr' : 'en');
-  setLang(lang);
-  document.getElementById('langBtn').addEventListener('click', ()=> setLang(document.documentElement.lang==='en' ? 'tr' : 'en'));
+  // floating decorations
+  (function(){const d=document.getElementById('deco');const G=['♪','♫','♬','✦','★','♩','🎵','✺'];const C=['#a855f7','#34e6a8','#fb7185','#fbbf24','#22d3ee'];for(let i=0;i<22;i++){const s=document.createElement('span');s.textContent=G[i%G.length];s.style.left=Math.random()*100+'%';s.style.bottom='-40px';s.style.fontSize=(14+Math.random()*26)+'px';s.style.color=C[i%C.length];s.style.opacity=.0;s.style.animationDuration=(11+Math.random()*12)+'s';s.style.animationDelay=(-Math.random()*16)+'s';d.appendChild(s);}})();
 
-  // reveal on scroll
-  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+  // i18n
+  const i18nEls=[...document.querySelectorAll('[data-en]')];
+  i18nEls.forEach(e=>e.dataset.tr=e.innerHTML);
+  const T={tr:{correct:'Harika! 🎉',wrong:'O değil — ',keep:'Doğru notaya dokun — seriyi büyüt 🎵'},en:{correct:'Awesome! 🎉',wrong:'Not quite — ',keep:'Tap the right note — build a streak 🎵'}};
+  let LANG='tr';
+  function setLang(l){LANG=l;document.documentElement.lang=l;i18nEls.forEach(e=>{e.innerHTML=(l==='en')?e.dataset.en:e.dataset.tr;});document.getElementById('langLabel').textContent=(l==='en')?'TR':'EN';try{localStorage.setItem('klef_lang',l);}catch(e){}}
+  let sv=null;try{sv=localStorage.getItem('klef_lang');}catch(e){}
+  setLang(sv||((navigator.language||'').toLowerCase().startsWith('tr')?'tr':'en'));
+  document.getElementById('langBtn').addEventListener('click',()=>{setLang(LANG==='en'?'tr':'en');});
+
+  // reveal + count-up
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
   document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+  const cio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const el=e.target,t=+el.dataset.c;let v=0,st=Math.max(1,Math.ceil(t/26));const tk=setInterval(()=>{v+=st;if(v>=t){v=t;clearInterval(tk);}el.textContent=v;},34);cio.unobserve(el);}}),{threshold:.6});
+  document.querySelectorAll('[data-c]').forEach(el=>cio.observe(el));
 
-  if(!RM){
-    // playhead sweep across the score strip + light up notes
-    const ph=document.getElementById('playhead');
-    const notes=[...document.querySelectorAll('#notes [data-n]')];
-    const xs=notes.map(n=>+n.querySelector('ellipse').getAttribute('cx'));
-    let x=120;const minX=120,maxX=1100,speed=2.6;
-    function tick(){
-      x+=speed;if(x>maxX)x=minX;
-      ph.setAttribute('x1',x);ph.setAttribute('x2',x);
-      notes.forEach((n,i)=>{const hit=Math.abs(xs[i]-x)<14;
-        n.querySelector('ellipse').setAttribute('fill',hit?'#d8b25a':'var(--ink)');
-        n.style.transformBox='fill-box';n.style.transition='transform .15s';n.style.transform=hit?'translateY(-2px)':'';});
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
+  // Web Audio
+  const AC=window.AudioContext||window.webkitAudioContext; let ac;
+  function ensure(){if(!ac)ac=new AC(); if(ac.state==='suspended')ac.resume();}
+  function tone(midi,dur=0.7){ensure();const f=440*Math.pow(2,(midi-69)/12);const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=f;o.connect(g);g.connect(ac.destination);const t=ac.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.22,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.start(t);o.stop(t+dur+.02);}
 
-    // magnetic buttons
-    document.querySelectorAll('.mag').forEach(b=>{
-      b.addEventListener('mousemove',(e)=>{const r=b.getBoundingClientRect();const mx=(e.clientX-r.left-r.width/2)/r.width,my=(e.clientY-r.top-r.height/2)/r.height;b.style.transform=`translate(${mx*10}px,${my*10}px)`;});
-      b.addEventListener('mouseleave',()=>{b.style.transform='';});
-    });
-  }
+  // confetti
+  function confetti(x,y){const C=['#a855f7','#34e6a8','#fb7185','#fbbf24','#22d3ee','#fff'];const card=document.getElementById('gamecard');const cr=card.getBoundingClientRect();for(let i=0;i<26;i++){const p=document.createElement('div');p.className='confetti';p.style.background=C[i%C.length];p.style.left=(x-cr.left)+'px';p.style.top=(y-cr.top)+'px';card.appendChild(p);const ang=Math.random()*Math.PI-Math.PI/2,dist=60+Math.random()*120,dx=Math.cos(ang)*dist*(Math.random()<.5?-1:1),dy=-(60+Math.random()*120);const rot=Math.random()*720-360;p.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${dx}px,${dy+160}px) rotate(${rot}deg)`,opacity:0}],{duration:900+Math.random()*500,easing:'cubic-bezier(.2,.6,.3,1)'}).onfinish=()=>p.remove();}}
+
+  // note-reading game
+  const POOL=[{n:'Do',m:60,y:100,led:true},{n:'Re',m:62,y:94},{n:'Mi',m:64,y:88},{n:'Fa',m:65,y:82},{n:'Sol',m:67,y:76},{n:'La',m:69,y:70},{n:'Si',m:71,y:64},{n:'Do₂',m:72,y:58}];
+  let cur,streak=0,locked=false;
+  const head=document.getElementById('head'),stem=document.getElementById('stem'),ledger=document.getElementById('ledger'),optsEl=document.getElementById('opts'),hintEl=document.getElementById('hint'),streakEl=document.getElementById('streak');
+  function place(note){head.setAttribute('cy',note.y);head.setAttribute('transform',`rotate(-18 172 ${note.y})`);stem.setAttribute('y',note.y-30);ledger.setAttribute('opacity',note.led?1:0);}
+  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function next(){locked=false;cur=POOL[Math.floor(Math.random()*POOL.length)];place(cur);const o=new Set([cur.n]);while(o.size<4)o.add(POOL[Math.floor(Math.random()*POOL.length)].n);optsEl.innerHTML='';shuffle([...o]).forEach(n=>{const b=document.createElement('button');b.className='opt';b.textContent=n;b.onclick=ev=>answer(b,n,ev);optsEl.appendChild(b);});}
+  function answer(btn,n,ev){if(locked)return;locked=true;tone(cur.m);if(n===cur.n){btn.classList.add('right');streak++;streakEl.textContent=streak;hintEl.textContent=T[LANG].correct;if(!RM)confetti(ev.clientX,ev.clientY);setTimeout(next,900);}else{btn.classList.add('wrong');streak=0;streakEl.textContent=0;[...optsEl.children].forEach(b=>{if(b.textContent===cur.n)b.classList.add('right');});hintEl.textContent=T[LANG].wrong+cur.n;setTimeout(next,1300);}}
+  document.getElementById('hear').onclick=()=>{if(cur)tone(cur.m);};
+  next();
+
+  // playable keyboard
+  const kb=document.getElementById('kb');
+  const whites=[{n:'Do',m:60},{n:'Re',m:62},{n:'Mi',m:64},{n:'Fa',m:65},{n:'Sol',m:67},{n:'La',m:69},{n:'Si',m:71}];
+  const blacks=[{m:61,after:0},{m:63,after:1},{m:66,after:3},{m:68,after:4},{m:70,after:5}];
+  whites.forEach(w=>{const k=document.createElement('div');k.className='wk';k.innerHTML='<span>'+w.n+'</span>';k.onpointerdown=()=>{tone(w.m,.8);k.classList.add('on');};k.onpointerup=k.onpointerleave=()=>k.classList.remove('on');kb.appendChild(k);});
+  function placeBlacks(){document.querySelectorAll('.bk').forEach(b=>b.remove());const w=[...kb.querySelectorAll('.wk')];if(!w.length)return;blacks.forEach(bd=>{const ref=w[bd.after];const k=document.createElement('div');k.className='bk';k.style.left=(ref.offsetLeft+ref.offsetWidth*.66)+'px';k.onpointerdown=e=>{e.stopPropagation();tone(bd.m,.8);k.classList.add('on');};k.onpointerup=k.onpointerleave=()=>k.classList.remove('on');kb.appendChild(k);});}
+  placeBlacks();window.addEventListener('resize',placeBlacks);
 </script>
 </body>
 </html>
